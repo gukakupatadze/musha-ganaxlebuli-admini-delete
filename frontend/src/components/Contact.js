@@ -102,12 +102,16 @@ const Contact = ({ language }) => {
         timeout: 10000 // 10 second timeout
       });
       
+      console.log('Contact form response:', response.data);
+      
       toast({
         title: language === 'ka' ? 'შეტყობინება გაგზავნილია!' : 'Message Sent!',
         description: language === 'ka' 
           ? 'ჩვენ მალე დაგიკავშირდებით'
           : 'We will contact you soon',
       });
+
+      console.log('Toast called successfully');
 
       // Reset form
       setFormData({
