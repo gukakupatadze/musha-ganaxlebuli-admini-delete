@@ -890,7 +890,7 @@ const AdminPanel = () => {
                           </div>
                         </div>
 
-                        {/* Expanded Content - Edit Mode */}
+                        {/* Expanded Content - View Mode */}
                         {isExpanded && (
                           <div className="mt-3 pt-3 border-t border-opacity-20" style={{ borderColor: darkMode ? '#374151' : '#e5e7eb' }}>
                             {/* Contact Info - Side by Side, Closer */}
@@ -919,55 +919,38 @@ const AdminPanel = () => {
                               )}
                             </div>
 
-                            {/* Edit Form Fields */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-                              <div>
-                                <label className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'} mb-1 block`}>სახელი</label>
-                                <Input
-                                  value={editRequestForm.name}
-                                  onChange={(e) => setEditRequestForm({...editRequestForm, name: e.target.value})}
-                                  onClick={(e) => e.stopPropagation()}
-                                  className={`text-sm ${darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
-                                />
-                              </div>
-                              <div>
-                                <label className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'} mb-1 block`}>მოწყობილობა</label>
-                                <select
-                                  value={editRequestForm.device_type}
-                                  onChange={(e) => setEditRequestForm({...editRequestForm, device_type: e.target.value})}
-                                  onClick={(e) => e.stopPropagation()}
-                                  className={`w-full text-sm p-2 border rounded-md ${darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
-                                >
-                                  <option value="hdd">HDD</option>
-                                  <option value="ssd">SSD</option>
-                                  <option value="usb">USB</option>
-                                  <option value="sd">SD Card</option>
-                                  <option value="raid">RAID</option>
-                                </select>
-                              </div>
-                            </div>
-
-                            {/* Problem Description */}
+                            {/* Full Problem Description - Read Only */}
                             <div className="mb-4">
-                              <label className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'} mb-1 block`}>📝 პრობლემის აღწერა</label>
-                              <textarea
-                                value={editRequestForm.problem_description}
-                                onChange={(e) => setEditRequestForm({...editRequestForm, problem_description: e.target.value})}
-                                onClick={(e) => e.stopPropagation()}
-                                onFocus={(e) => e.stopPropagation()}
-                                onMouseDown={(e) => e.stopPropagation()}
-                                className={`w-full p-2 text-sm rounded-md border resize-none ${
-                                  darkMode 
-                                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
-                                    : 'bg-white border-gray-300 text-gray-900'
-                                }`}
-                                rows="3"
-                              />
+                              <p className={`text-xs mb-2 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                📝 მომხმარებლის მოთხოვნა
+                              </p>
+                              <div className={`p-3 rounded-md text-sm leading-relaxed ${
+                                darkMode ? 'bg-gray-700 text-gray-100' : 'bg-gray-50 text-gray-800'
+                              }`}>
+                                <div className="grid grid-cols-2 gap-4 mb-3 text-xs">
+                                  <div>
+                                    <span className={darkMode ? 'text-gray-400' : 'text-gray-500'}>მოწყობილობა:</span>
+                                    <span className="ml-2 font-medium">{request.device_type.toUpperCase()}</span>
+                                  </div>
+                                  <div>
+                                    <span className={darkMode ? 'text-gray-400' : 'text-gray-500'}>სისწრაფე:</span>
+                                    <span className="ml-2 font-medium">
+                                      {request.urgency === 'low' ? 'დაბალი' :
+                                       request.urgency === 'medium' ? 'საშუალო' :
+                                       request.urgency === 'high' ? 'მაღალი' :
+                                       request.urgency === 'critical' ? 'კრიტიკული' : request.urgency}
+                                    </span>
+                                  </div>
+                                </div>
+                                <p>{request.problem_description}</p>
+                              </div>
                             </div>
 
                             {/* Admin Comment */}
                             <div className="mb-4">
-                              <label className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'} mb-1 block`}>💬 ადმინის კომენტარი</label>
+                              <p className={`text-xs mb-2 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                💬 ადმინის კომენტარი
+                              </p>
                               <textarea
                                 placeholder="დაამატეთ კომენტარი - რა მუშაობა ჩატარდა..."
                                 className={`w-full p-2 text-sm rounded-md border resize-none ${
@@ -984,31 +967,111 @@ const AdminPanel = () => {
                               />
                             </div>
 
-                            {/* Action Buttons - Only When Expanded */}
+                            {/* Edit Mode Toggle & Action Buttons */}
+                            {editingRequest === request.id ? (
+                              /* Edit Mode - Show Edit Form */
+                              <div className={`p-3 rounded-md mb-4 ${darkMode ? 'bg-gray-600' : 'bg-blue-50'}`}>
+                                <p className={`text-sm font-medium mb-3 ${darkMode ? 'text-blue-300' : 'text-blue-700'}`}>
+                                  ✏️ რედაქტირების რეჟიმი
+                                </p>
+                                
+                                {/* Edit Form Fields */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                                  <div>
+                                    <label className={`text-xs ${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-1 block`}>სახელი</label>
+                                    <Input
+                                      value={editRequestForm.name}
+                                      onChange={(e) => setEditRequestForm({...editRequestForm, name: e.target.value})}
+                                      onClick={(e) => e.stopPropagation()}
+                                      className={`text-sm ${darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className={`text-xs ${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-1 block`}>მოწყობილობა</label>
+                                    <select
+                                      value={editRequestForm.device_type}
+                                      onChange={(e) => setEditRequestForm({...editRequestForm, device_type: e.target.value})}
+                                      onClick={(e) => e.stopPropagation()}
+                                      className={`w-full text-sm p-2 border rounded-md ${darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
+                                    >
+                                      <option value="hdd">HDD</option>
+                                      <option value="ssd">SSD</option>
+                                      <option value="usb">USB</option>
+                                      <option value="sd">SD Card</option>
+                                      <option value="raid">RAID</option>
+                                    </select>
+                                  </div>
+                                </div>
+
+                                {/* Problem Description Edit */}
+                                <div className="mb-3">
+                                  <label className={`text-xs ${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-1 block`}>პრობლემის აღწერა</label>
+                                  <textarea
+                                    value={editRequestForm.problem_description}
+                                    onChange={(e) => setEditRequestForm({...editRequestForm, problem_description: e.target.value})}
+                                    onClick={(e) => e.stopPropagation()}
+                                    onFocus={(e) => e.stopPropagation()}
+                                    onMouseDown={(e) => e.stopPropagation()}
+                                    className={`w-full p-2 text-sm rounded-md border resize-none ${
+                                      darkMode 
+                                        ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                                        : 'bg-white border-gray-300 text-gray-900'
+                                    }`}
+                                    rows="3"
+                                  />
+                                </div>
+
+                                {/* Save & Cancel Buttons */}
+                                <div className="flex gap-2">
+                                  <Button 
+                                    size="sm" 
+                                    className="bg-green-600 hover:bg-green-700 text-white text-xs"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      saveEditRequest(request.id);
+                                    }}
+                                  >
+                                    <Save className="w-3 h-3 mr-1" />
+                                    შენახვა
+                                  </Button>
+                                  <Button 
+                                    size="sm" 
+                                    variant="outline"
+                                    className={`text-xs ${darkMode ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-100'}`}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      cancelEditRequest();
+                                    }}
+                                  >
+                                    <X className="w-3 h-3 mr-1" />
+                                    გაუქმება
+                                  </Button>
+                                </div>
+                              </div>
+                            ) : null}
+
+                            {/* Action Buttons - Always Visible */}
                             <div className="flex gap-2 flex-wrap">
-                              {/* Save & Cancel Buttons */}
-                              <Button 
-                                size="sm" 
-                                className="bg-green-600 hover:bg-green-700 text-white text-xs"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  saveEditRequest(request.id);
-                                }}
-                              >
-                                <Save className="w-3 h-3 mr-1" />
-                                შენახვა
-                              </Button>
+                              {/* Edit Button - Toggle Edit Mode */}
                               <Button 
                                 size="sm" 
                                 variant="outline"
-                                className={`text-xs ${darkMode ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-100'}`}
+                                className={`text-xs ${
+                                  darkMode 
+                                    ? 'border-orange-600 text-orange-400 hover:bg-orange-800 hover:bg-opacity-20' 
+                                    : 'border-orange-300 text-orange-600 hover:bg-orange-50'
+                                }`}
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  cancelEditRequest();
+                                  if (editingRequest === request.id) {
+                                    cancelEditRequest();
+                                  } else {
+                                    startEditRequest(request.id);
+                                  }
                                 }}
                               >
-                                <X className="w-3 h-3 mr-1" />
-                                გაუქმება
+                                <Edit className="w-3 h-3 mr-1" />
+                                {editingRequest === request.id ? 'რედაქტირების გაუქმება' : 'რედაქტირება'}
                               </Button>
 
                               {/* Status Action Buttons */}
