@@ -1329,15 +1329,15 @@ const AdminPanel = () => {
                             {/* Contact Info */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
                               <div className="flex items-center gap-2">
-                                <Mail className={`w-3 h-3 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
-                                <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                <Mail className={`w-3 h-3 ${darkMode ? 'text-gray-300' : 'text-gray-500'}`} />
+                                <span className={`text-sm ${darkMode ? 'text-gray-100' : 'text-gray-700'}`}>
                                   {message.email}
                                 </span>
                               </div>
                               {message.phone && (
                                 <div className="flex items-center gap-2">
-                                  <Phone className={`w-3 h-3 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
-                                  <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                  <Phone className={`w-3 h-3 ${darkMode ? 'text-gray-300' : 'text-gray-500'}`} />
+                                  <span className={`text-sm ${darkMode ? 'text-gray-100' : 'text-gray-700'}`}>
                                     {message.phone}
                                   </span>
                                 </div>
@@ -1347,7 +1347,7 @@ const AdminPanel = () => {
                             {/* Full Message */}
                             <div className="mb-4">
                               <div className={`p-3 rounded-md text-sm leading-relaxed ${
-                                darkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-50 text-gray-800'
+                                darkMode ? 'bg-gray-700 text-gray-100' : 'bg-gray-50 text-gray-800'
                               }`}>
                                 {message.message}
                               </div>
