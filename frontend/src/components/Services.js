@@ -15,7 +15,8 @@ const Services = ({ language }) => {
       HardDrive,
       Shield, 
       Wrench,
-      Search
+      Search,
+      Camera
     };
     return icons[iconName] || HardDrive;
   };
