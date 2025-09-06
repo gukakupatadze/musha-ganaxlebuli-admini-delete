@@ -137,7 +137,7 @@ export const services = [
     icon: "Wrench",
     titleKey: "hardwareRepair",
     descKey: "hardwareRepairDesc",
-    features: ["ფიზიკური დაზიანება", "კონტროლერის პრობლემები", "ფორმატირების შემდეგ", "NAND მეხსიერება"],
+    features: ["ფიზიკური დაზიანება", "კონტროლერის პრობლემები", "ფორმატირების შემდეგ", "NAND ჩიპები"],
     price: "დან 150₾"
   },
   {
