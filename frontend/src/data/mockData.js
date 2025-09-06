@@ -121,8 +121,8 @@ export const services = [
     icon: "HardDrive",
     titleKey: "dataRecovery",
     descKey: "dataRecoveryDesc",
-    features: ["HDD Recovery", "SSD Recovery", "RAID Recovery", "USB Recovery", "SD Card Recovery"],
-    price: "დან 100₾"
+    features: ["მექანიკური დაზიანება", "ლოგიკური კორუფცია", "ფაილების წაშლა / ფორმატირება", "SMART შეცდომები"],
+    price: "150₾ დან"
   },
   {
     id: 2,
