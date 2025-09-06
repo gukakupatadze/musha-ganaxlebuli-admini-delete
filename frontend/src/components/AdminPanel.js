@@ -1064,7 +1064,10 @@ const AdminPanel = () => {
                       className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} cursor-pointer transition-all duration-200 border-l-4 border-l-purple-500 ${
                         isExpanded ? 'shadow-md' : 'hover:shadow-sm'
                       }`}
-                      onClick={() => setSelectedArchivedRequest(selectedArchivedRequest?.id === request.id ? null : request)}
+                      onClick={() => {
+                        // Accordion behavior - only one expanded at a time
+                        setSelectedArchivedRequest(selectedArchivedRequest?.id === request.id ? null : request);
+                      }}
                     >
                       {/* Compact Row */}
                       <div className="px-4 py-2">
