@@ -129,7 +129,7 @@ export const services = [
     icon: "HardDrive",
     titleKey: "dataBackup",
     descKey: "dataBackupDesc",
-    features: ["მექანიკური დაზიანება", "ლოგიკური შეცდომა", "ფაილების წაშლა", "დისკი არ იკითხება"],
+    features: ["კონტროლერის დაზიანება", "Flash მეხსიერების ცვეთა", "Firmware კორუფცია", "NAND ჩიპები"],
     price: "200₾ დან"
   },
   {
