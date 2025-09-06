@@ -603,32 +603,16 @@ const AdminPanel = () => {
 
   const formatDateTime = (dateString) => {
     const date = new Date(dateString);
-    const now = new Date();
-    const diffInHours = (now - date) / (1000 * 60 * 60);
     
-    if (diffInHours < 24) {
-      // If less than 24 hours ago, show time
-      return date.toLocaleTimeString('ka-GE', { 
-        hour: '2-digit', 
-        minute: '2-digit',
-        hour12: false
-      });
-    } else if (diffInHours < 168) { // Less than 7 days
-      // Show day and time
-      return date.toLocaleDateString('ka-GE', { 
-        weekday: 'short',
-        hour: '2-digit', 
-        minute: '2-digit',
-        hour12: false
-      });
-    } else {
-      // Show full date
-      return date.toLocaleDateString('ka-GE', { 
-        month: 'short', 
-        day: 'numeric',
-        year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
-      });
-    }
+    // Always show full date with month, year and time
+    return date.toLocaleString('ka-GE', { 
+      year: 'numeric',
+      month: 'short', 
+      day: 'numeric',
+      hour: '2-digit', 
+      minute: '2-digit',
+      hour12: false
+    });
   };
 
   // Filter only approved service requests for Dashboard analytics
