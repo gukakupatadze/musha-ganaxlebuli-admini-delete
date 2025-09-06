@@ -26,8 +26,8 @@ export const translations = {
     hardwareRepair: "USB აღდგენა",
     hardwareRepairDesc: "USB ,SD, microSD ბარათებიდან მონაცემთა აღდგენა",
     
-    forensicRecovery: "სასამართლო მონაცემთა აღდგენა",
-    forensicRecoveryDesc: "იურიდიული მიზნებისთვის მონაცემთა აღდგენა და ანალიზი",
+    forensicRecovery: "RAID აღდგენა",
+    forensicRecoveryDesc: "RAID მასივებიდან მონაცემთა აღდგენა და კონფიგურაციები",
     
     // Service Request
     serviceRequestTitle: "სერვისის მოთხოვნა",
