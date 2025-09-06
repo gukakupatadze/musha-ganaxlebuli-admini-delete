@@ -122,6 +122,7 @@ export const services = [
     titleKey: "dataRecovery",
     descKey: "dataRecoveryDesc",
     features: ["მექანიკური დაზიანება", "ლოგიკური შეცდომა", "ფაილების წაშლა", "დისკი არ იკითხება"],
+    features_en: ["Mechanical damage", "Logical errors", "File deletion", "Drive not readable"],
     price: "150₾ დან"
   },
   {
@@ -130,6 +131,7 @@ export const services = [
     titleKey: "dataBackup",
     descKey: "dataBackupDesc",
     features: ["კონტროლერის დაზიანება", "Flash მეხსიერების ცვეთა", "Firmware კორუფცია", "NAND ჩიპები"],
+    features_en: ["Controller damage", "Flash memory wear", "Firmware corruption", "NAND chips"],
     price: "200₾ დან"
   },
   {
@@ -138,6 +140,7 @@ export const services = [
     titleKey: "hardwareRepair",
     descKey: "hardwareRepairDesc",
     features: ["ფიზიკური დაზიანება", "კონტროლერის პრობლემები", "ფორმატირების შემდეგ", "NAND ჩიპები"],
+    features_en: ["Physical damage", "Controller problems", "After formatting", "NAND chips"],
     price: "დან 150₾"
   },
   {
@@ -146,6 +149,7 @@ export const services = [
     titleKey: "forensicRecovery",
     descKey: "forensicRecoveryDesc",
     features: ["RAID 0, 1, 5, 6, 10", "კონტროლერის პრობლემები", "Virtual RAID", "NAS სისტემები"],
+    features_en: ["RAID 0, 1, 5, 6, 10", "Controller problems", "Virtual RAID", "NAS systems"],
     price: "400₾ დან"
   }
 ];
