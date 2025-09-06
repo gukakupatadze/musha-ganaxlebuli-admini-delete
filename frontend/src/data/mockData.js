@@ -126,11 +126,11 @@ export const services = [
   },
   {
     id: 2,
-    icon: "Shield",
+    icon: "HardDrive",
     titleKey: "dataBackup",
     descKey: "dataBackupDesc",
-    features: ["Cloud Backup", "Local Backup", "Automated Backup", "Data Encryption"],
-    price: "დან 50₾"
+    features: ["მექანიკური დაზიანება", "ლოგიკური შეცდომა", "ფაილების წაშლა", "დისკი არ იკითხება"],
+    price: "200₾ დან"
   },
   {
     id: 3,
