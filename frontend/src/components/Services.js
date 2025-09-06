@@ -43,20 +43,20 @@ const Services = ({ language }) => {
                 key={service.id}
                 className="service-card bg-gray-800 border-gray-700 hover:border-red-accent/50 group cursor-pointer"
               >
-                <CardHeader className="text-center pb-2">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-red-accent/10 rounded-full mb-2 mx-auto group-hover:bg-red-accent/20 transition-colors duration-300">
+                <CardHeader className="text-center pb-1">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-red-accent/10 rounded-full mb-1 mx-auto group-hover:bg-red-accent/20 transition-colors duration-300">
                     <IconComponent className="w-8 h-8 text-red-accent" />
                   </div>
                   <CardTitle className="text-xl font-bold text-white mb-1">
                     {t[service.titleKey]}
                   </CardTitle>
-                  <CardDescription className="text-gray-400">
+                  <CardDescription className="text-gray-400 mb-1">
                     {t[service.descKey]}
                   </CardDescription>
                 </CardHeader>
                 
-                <CardContent className="pt-0">
-                  <div className="space-y-2 mb-8">
+                <CardContent className="pt-2">
+                  <div className="space-y-2 mb-10 mt-4">
                     {service.features.map((feature, index) => (
                       <div key={index} className="flex items-center text-sm text-gray-300">
                         <ChevronRight className="w-4 h-4 text-red-accent mr-2 flex-shrink-0" />
@@ -65,7 +65,7 @@ const Services = ({ language }) => {
                     ))}
                   </div>
                   
-                  <div className="flex items-center justify-between mt-6">
+                  <div className="flex items-center justify-between mt-8">
                     <Badge variant="outline" className="border-red-accent text-red-accent">
                       {service.price}
                     </Badge>
