@@ -576,17 +576,23 @@ const AdminPanel = () => {
 
   const toggleMessageExpansion = (messageId) => {
     setExpandedMessages(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(messageId)) {
-        newSet.delete(messageId);
+      const newSet = new Set();
+      
+      // If clicking on already expanded message, close it
+      if (prev.has(messageId)) {
+        // Close all messages
+        return newSet;
       } else {
+        // Open only the clicked message (close all others)
         newSet.add(messageId);
+        
         // Mark as read when expanded
         if (contactMessages.find(m => m.id === messageId)?.status === 'new') {
           updateMessageStatus(messageId, 'read');
         }
+        
+        return newSet;
       }
-      return newSet;
     });
   };
 
