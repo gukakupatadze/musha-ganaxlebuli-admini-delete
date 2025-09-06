@@ -118,7 +118,7 @@ export const translations = {
 export const services = [
   {
     id: 1,
-    icon: "HardDrive",
+    icon: "Camera",
     titleKey: "dataRecovery",
     descKey: "dataRecoveryDesc",
     features: ["მექანიკური დაზიანება", "ლოგიკური შეცდომა", "ფაილების წაშლა", "დისკი არ იკითხება"],
