@@ -141,7 +141,7 @@ export const services = [
     descKey: "hardwareRepairDesc",
     features: ["ფიზიკური დაზიანება", "კონტროლერის პრობლემები", "ფორმატირების შემდეგ", "NAND ჩიპები"],
     features_en: ["Physical damage", "Controller problems", "After formatting", "NAND chips"],
-    price: "დან 150₾"
+    price: "50₾ დან"
   },
   {
     id: 4,
