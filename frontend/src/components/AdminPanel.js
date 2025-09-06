@@ -1317,7 +1317,7 @@ const AdminPanel = () => {
                                message.status === 'read' ? 'წაკითხული' : 
                                message.status === 'replied' ? 'პასუხი' : message.status}
                             </Badge>
-                            <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'} w-16 text-right`}>
+                            <span className={`text-xs ${darkMode ? 'text-gray-300' : 'text-gray-500'} w-16 text-right`}>
                               {formatDateTime(message.created_at)}
                             </span>
                           </div>
