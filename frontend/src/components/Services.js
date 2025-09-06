@@ -21,7 +21,9 @@ const Services = ({ language }) => {
       Database,   // მონაცემები
       Cpu,        // პროცესორი/ჩიპი
       Server,     // სერვერი/ტექნოლოგია
-      CreditCard  // ბარათი - კარგია USB/SD/microSD-ისთვის
+      CreditCard, // ბარათი
+      Usb,        // USB icon - პირდაპირ USB-ისთვის
+      Layers      // ფენები - კარგია RAID-ისთვის (მრავალი ფენა)
     };
     return icons[iconName] || HardDrive;
   };
