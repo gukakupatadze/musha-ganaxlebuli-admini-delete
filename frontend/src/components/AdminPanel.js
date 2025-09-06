@@ -870,7 +870,7 @@ const AdminPanel = () => {
                             </div>
                           </div>
                           
-                          {/* Status Badge & Price & Date - Compact */}
+                          {/* Status Badge & Price - Compact (without date) */}
                           <div className="flex items-center gap-2 flex-shrink-0">
                             <Badge 
                               variant="outline" 
@@ -886,16 +886,6 @@ const AdminPanel = () => {
                                 {request.price}₾
                               </Badge>
                             )}
-                            <span className={`text-xs ${darkMode ? 'text-gray-300' : 'text-gray-500'} w-20 text-right`}>
-                              <div>{formatDateTime(request.created_at)}</div>
-                              <div className="text-xs opacity-75">
-                                {new Date(request.created_at).toLocaleDateString('ka-GE', { 
-                                  month: 'short', 
-                                  day: 'numeric',
-                                  year: 'numeric'
-                                })}
-                              </div>
-                            </span>
                           </div>
                         </div>
 
