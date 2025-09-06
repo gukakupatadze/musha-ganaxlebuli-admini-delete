@@ -17,8 +17,8 @@ export const translations = {
     servicesTitle: "ჩვენი სერვისები",
     servicesSubtitle: "თანამედროვე ტექნოლოგიებითა და გამოცდილი სპეციალისტებით ვაღვადგენთ მონაცემებს",
     
-    dataRecovery: "მონაცემთა აღდგენა",
-    dataRecoveryDesc: "HDD, SSD, RAID, USB, SD ბარათებიდან მონაცემთა აღდგენა",
+    dataRecovery: "HDD აღდგენა",
+    dataRecoveryDesc: "დაზიანებული მყარი დისკებიდან ფაილების აღდგენა",
     
     dataBackup: "მონაცემთა სარეზერვო კოპირება",
     dataBackupDesc: "რეგულარული სარეზერვო კოპირება და მონაცემთა უსაფრთხოება",
