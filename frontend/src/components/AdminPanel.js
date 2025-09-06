@@ -359,16 +359,19 @@ const AdminPanel = () => {
     setPriceInput(currentPrice ? currentPrice.toString() : '');
   };
 
-  const startEditRequest = (request) => {
-    setEditingRequest(request.id);
-    setEditRequestForm({
-      name: request.name || '',
-      email: request.email || '',
-      phone: request.phone || '',
-      device_type: request.device_type || '',
-      problem_description: request.problem_description || '',
-      urgency: request.urgency || 'medium'
-    });
+  const startEditRequest = (requestId) => {
+    const request = serviceRequests.find(r => r.id === requestId);
+    if (request) {
+      setEditingRequest(requestId);
+      setEditRequestForm({
+        name: request.name || '',
+        email: request.email || '',
+        phone: request.phone || '',
+        device_type: request.device_type || '',
+        problem_description: request.problem_description || '',
+        urgency: request.urgency || 'medium'
+      });
+    }
   };
 
   const cancelEditRequest = () => {
