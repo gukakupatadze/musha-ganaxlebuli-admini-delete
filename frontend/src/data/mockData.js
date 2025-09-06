@@ -80,8 +80,8 @@ export const translations = {
     dataBackup: "SSD Recovery",
     dataBackupDesc: "File recovery from damaged SSD drives",
     
-    hardwareRepair: "Hardware Repair",
-    hardwareRepairDesc: "Repair of damaged data storage devices",
+    hardwareRepair: "USB Recovery",
+    hardwareRepairDesc: "Data recovery from USB, SD, microSD cards",
     
     forensicRecovery: "Forensic Data Recovery",
     forensicRecoveryDesc: "Data recovery and analysis for legal purposes",
