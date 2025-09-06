@@ -1252,7 +1252,7 @@ const AdminPanel = () => {
                     <Card 
                       key={message.id}
                       className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} cursor-pointer transition-all duration-200 ${
-                        isUnread ? 'bg-blue-50 dark:bg-blue-900/20 border-l-4 border-l-blue-500 font-semibold' : ''
+                        isUnread ? 'bg-blue-900/30 dark:bg-blue-900/30 border-l-4 border-l-blue-500 font-semibold' : ''
                       } ${
                         isExpanded ? 'shadow-md' : 'hover:shadow-sm'
                       }`}
