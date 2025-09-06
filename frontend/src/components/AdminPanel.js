@@ -812,6 +812,8 @@ const AdminPanel = () => {
                         isExpanded ? 'shadow-md' : 'hover:shadow-sm'
                       }`}
                       onClick={() => !isExpanded ? setEditingRequest(request.id) : null}
+                      onScroll={(e) => e.stopPropagation()}
+                      onWheel={(e) => e.stopPropagation()}
                     >
                       {/* Compact Row */}
                       <div className="px-4 py-2">
