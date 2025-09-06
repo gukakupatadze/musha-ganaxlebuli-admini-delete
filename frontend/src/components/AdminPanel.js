@@ -374,6 +374,35 @@ const AdminPanel = () => {
     }
   };
 
+  const saveEditRequest = async (requestId) => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/service-requests/${requestId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(editRequestForm)
+      });
+      
+      if (response.ok) {
+        const updatedRequest = await response.json();
+        setServiceRequests(prev => prev.map(r => 
+          r.id === requestId ? { ...r, ...updatedRequest } : r
+        ));
+        cancelEditRequest();
+        toast({
+          title: "შენახულია",
+          description: "მოთხოვნა წარმატებით განახლდა",
+        });
+      }
+    } catch (error) {
+      console.error('Error updating request:', error);
+      toast({
+        title: "შეცდომა",
+        description: "მოთხოვნის განახლება ვერ მოხერხდა",
+        variant: "destructive",
+      });
+    }
+  };
+
   const cancelEditRequest = () => {
     setEditingRequest(null);
     setEditRequestForm({
