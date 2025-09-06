@@ -878,7 +878,7 @@ const AdminPanel = () => {
                             </div>
                           </div>
                           
-                          {/* Status Badge & Price - Compact (without date) */}
+                          {/* Status Badge & Price & Date - Compact */}
                           <div className="flex items-center gap-2 flex-shrink-0">
                             <Badge 
                               variant="outline" 
@@ -894,6 +894,9 @@ const AdminPanel = () => {
                                 {request.price}₾
                               </Badge>
                             )}
+                            <span className={`text-xs ${darkMode ? 'text-gray-300' : 'text-gray-500'} w-16 text-right`}>
+                              {formatDateTime(request.created_at)}
+                            </span>
                           </div>
                         </div>
 
