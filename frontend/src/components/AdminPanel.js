@@ -902,8 +902,8 @@ const AdminPanel = () => {
                         {/* Expanded Content - View Mode Only */}
                         {isExpanded && (
                           <div className="mt-3 pt-3 border-t border-opacity-20" style={{ borderColor: darkMode ? '#374151' : '#e5e7eb' }}>
-                            {/* Contact Info - Side by Side, Closer */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-1 mb-3">
+                            {/* Contact Info & Date Info - Side by Side */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-1 mb-3">
                               <div className="flex items-center gap-2">
                                 <Mail className={`w-3 h-3 ${darkMode ? 'text-gray-300' : 'text-gray-500'}`} />
                                 <span 
@@ -926,6 +926,19 @@ const AdminPanel = () => {
                                   </span>
                                 </div>
                               )}
+                              <div className="flex items-center gap-2">
+                                <Calendar className={`w-3 h-3 ${darkMode ? 'text-gray-300' : 'text-gray-500'}`} />
+                                <span className={`text-sm ${darkMode ? 'text-gray-100' : 'text-gray-700'}`}>
+                                  {new Date(request.created_at).toLocaleString('ka-GE', {
+                                    year: 'numeric',
+                                    month: 'long', 
+                                    day: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                    hour12: false
+                                  })}
+                                </span>
+                              </div>
                             </div>
 
                             {/* Full Problem Description - Read Only */}
