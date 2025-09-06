@@ -23,8 +23,8 @@ export const translations = {
     dataBackup: "SSD აღდგენა",
     dataBackupDesc: "დაზიანებული SSD დისკებიდან ფაილების აღდგენა",
     
-    hardwareRepair: "აპარატული შეკეთება",
-    hardwareRepairDesc: "დაზიანებული მონაცემთა შენახვის მოწყობილობების შეკეთება",
+    hardwareRepair: "USB აღდგენა",
+    hardwareRepairDesc: "USB ,SD, microSD ბარათებიდან მონაცემთა აღდგენა",
     
     forensicRecovery: "სასამართლო მონაცემთა აღდგენა",
     forensicRecoveryDesc: "იურიდიული მიზნებისთვის მონაცემთა აღდგენა და ანალიზი",
