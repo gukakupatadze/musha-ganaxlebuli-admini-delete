@@ -1276,7 +1276,7 @@ const AdminPanel = () => {
                               <p className={`text-sm truncate ${
                                 isUnread 
                                   ? darkMode ? 'text-white font-semibold' : 'text-gray-900 font-semibold'
-                                  : darkMode ? 'text-gray-300' : 'text-gray-700'
+                                  : darkMode ? 'text-gray-100' : 'text-gray-700'
                               }`}>
                                 {message.name}
                               </p>
@@ -1288,12 +1288,12 @@ const AdminPanel = () => {
                                 <span className={`text-sm font-medium ${
                                   isUnread 
                                     ? darkMode ? 'text-white' : 'text-gray-900'
-                                    : darkMode ? 'text-gray-300' : 'text-gray-700'
+                                    : darkMode ? 'text-gray-200' : 'text-gray-700'
                                 }`}>
                                   {message.subject}
                                 </span>
                                 {!isExpanded && (
-                                  <span className={`text-sm truncate ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                  <span className={`text-sm truncate ${darkMode ? 'text-gray-300' : 'text-gray-500'}`}>
                                     - {message.message.length > 50 
                                       ? `${message.message.substring(0, 50)}...` 
                                       : message.message}
