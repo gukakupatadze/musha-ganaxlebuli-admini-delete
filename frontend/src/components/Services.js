@@ -1,5 +1,5 @@
 import React from 'react';
-import { HardDrive, Shield, Wrench, Search, ChevronRight } from 'lucide-react';
+import { HardDrive, Shield, Wrench, Search, ChevronRight, Camera } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
