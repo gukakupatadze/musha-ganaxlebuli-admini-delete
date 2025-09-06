@@ -1216,222 +1216,217 @@ const AdminPanel = () => {
           </div>
         )}
 
-        {/* Contact Messages Tab - Gmail Style */}
+        {/* Contact Messages Tab - Enhanced Card Style */}
         {activeTab === 'contact-messages' && (
           <div className="space-y-6">
-            <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-sm border ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-              {/* Header */}
-              <div className={`px-6 py-4 border-b ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-                <h3 className={`text-lg font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>📧 კონტაქტის შეტყობინებები</h3>
-                <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                  ნაცვლისფერით არაწაკითხული შეტყობინებები
-                </p>
+            <div className="flex items-center justify-between">
+              <h2 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-black'}`}>📧 კონტაქტის შეტყობინებები</h2>
+              <div className="flex items-center gap-3">
+                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                  სულ: {contactMessages.length}
+                </Badge>
+                <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">
+                  ახალი: {contactMessages.filter(m => m.status === 'new').length}
+                </Badge>
               </div>
+            </div>
 
-              {/* Messages List */}
-              <div className="divide-y divide-gray-200 dark:divide-gray-700">
-                {contactMessages
-                  .sort((a, b) => {
-                    // Sort by status first (new messages first), then by date (newest first)
-                    if (a.status === 'new' && b.status !== 'new') return -1;
-                    if (a.status !== 'new' && b.status === 'new') return 1;
-                    return new Date(b.created_at) - new Date(a.created_at);
-                  })
-                  .map((message) => {
-                    const isUnread = message.status === 'new';
-                    const isExpanded = expandedMessages.has(message.id);
-                    
-                    return (
-                      <div
-                        key={message.id}
-                        className={`relative transition-all duration-300 cursor-pointer hover:bg-opacity-80 ${
-                          isUnread 
-                            ? darkMode 
-                              ? 'bg-blue-900/20 border-l-4 border-l-blue-500 animate-pulse' 
-                              : 'bg-blue-50 border-l-4 border-l-blue-500'
-                            : ''
-                        } ${
-                          isExpanded 
-                            ? darkMode ? 'bg-gray-700' : 'bg-gray-50'
-                            : darkMode ? 'hover:bg-gray-700/50' : 'hover:bg-gray-50'
-                        }`}
-                        onClick={() => toggleMessageExpansion(message.id)}
-                        style={{
-                          animation: isUnread ? 'fadeInOut 2s infinite' : 'none'
-                        }}
-                      >
-                        {/* Compact Message Row */}
-                        <div className="px-6 py-4">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-4 flex-1 min-w-0">
-                              {/* Status Indicator */}
-                              <div className={`w-3 h-3 rounded-full flex-shrink-0 ${
-                                isUnread 
-                                  ? 'bg-blue-500 shadow-lg shadow-blue-500/50' 
-                                  : message.status === 'replied' 
-                                    ? 'bg-green-500' 
-                                    : 'bg-gray-400'
-                              }`}></div>
-                              
-                              {/* Sender Info */}
-                              <div className="flex-shrink-0">
-                                <p className={`text-sm font-semibold ${
-                                  isUnread 
-                                    ? darkMode ? 'text-white' : 'text-gray-900'
-                                    : darkMode ? 'text-gray-300' : 'text-gray-700'
-                                }`}>
-                                  {message.name}
-                                </p>
-                                <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                                  {message.email}
-                                </p>
-                              </div>
-                              
-                              {/* Subject & Preview */}
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2">
-                                  <h4 className={`text-sm font-medium truncate ${
-                                    isUnread 
-                                      ? darkMode ? 'text-white' : 'text-gray-900'
-                                      : darkMode ? 'text-gray-300' : 'text-gray-700'
-                                  }`}>
-                                    {message.subject}
-                                  </h4>
-                                  {!isExpanded && (
-                                    <span className={`text-xs px-2 py-1 rounded-full ${
-                                      message.status === 'new' ? 'bg-red-100 text-red-800' :
-                                      message.status === 'replied' ? 'bg-green-100 text-green-800' :
-                                      'bg-gray-100 text-gray-800'
-                                    }`}>
-                                      {message.status === 'new' ? 'ახალი' : 
-                                       message.status === 'read' ? 'წაკითხული' : 
-                                       message.status === 'replied' ? 'პასუხგაცემული' : message.status}
-                                    </span>
-                                  )}
-                                </div>
-                                {!isExpanded && (
-                                  <p className={`text-sm truncate mt-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                                    {message.message.length > 60 
-                                      ? `${message.message.substring(0, 60)}...` 
-                                      : message.message}
-                                  </p>
-                                )}
-                              </div>
+            {/* Messages Grid - Card Style */}
+            <div className="grid gap-4">
+              {contactMessages
+                .sort((a, b) => {
+                  // Sort by status first (new messages first), then by date (newest first)
+                  if (a.status === 'new' && b.status !== 'new') return -1;
+                  if (a.status !== 'new' && b.status === 'new') return 1;
+                  return new Date(b.created_at) - new Date(a.created_at);
+                })
+                .map((message) => {
+                  const isUnread = message.status === 'new';
+                  const isExpanded = expandedMessages.has(message.id);
+                  
+                  return (
+                    <Card 
+                      key={message.id}
+                      className={`${darkMode ? 'bg-gray-800 border-gray-600' : 'bg-white border-gray-200'} shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer ${
+                        isUnread ? 'ring-2 ring-blue-500 border-blue-500' : ''
+                      } ${
+                        isExpanded ? 'shadow-lg' : ''
+                      }`}
+                      onClick={() => toggleMessageExpansion(message.id)}
+                    >
+                      <CardHeader className="pb-3">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            {/* Status Dot */}
+                            <div className={`w-3 h-3 rounded-full flex-shrink-0 ${
+                              isUnread 
+                                ? 'bg-blue-500 animate-pulse shadow-lg shadow-blue-500/50' 
+                                : message.status === 'replied' 
+                                  ? 'bg-green-500' 
+                                  : 'bg-gray-400'
+                            }`}></div>
+                            
+                            {/* User Avatar */}
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                              isUnread ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'
+                            }`}>
+                              <User className="w-5 h-5" />
                             </div>
                             
-                            {/* Time & Phone */}
-                            <div className="flex flex-col items-end space-y-1 flex-shrink-0">
-                              <span className={`text-xs ${
-                                isUnread 
-                                  ? darkMode ? 'text-blue-400' : 'text-blue-600'
-                                  : darkMode ? 'text-gray-400' : 'text-gray-500'
+                            <div>
+                              <CardTitle className={`text-lg ${darkMode ? 'text-white' : 'text-gray-900'} ${
+                                isUnread ? 'font-bold' : 'font-semibold'
                               }`}>
-                                {formatDateTime(message.created_at)}
-                              </span>
-                              {message.phone && (
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    window.open(`tel:${message.phone}`, '_self');
-                                  }}
-                                  className={`p-1 rounded-full hover:bg-blue-100 ${darkMode ? 'hover:bg-blue-900' : ''} transition-colors`}
-                                  title={message.phone}
-                                >
-                                  <Phone className={`w-3 h-3 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />
-                                </button>
-                              )}
+                                {message.name}
+                              </CardTitle>
+                              <CardDescription className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} text-sm`}>
+                                {message.email}
+                              </CardDescription>
                             </div>
                           </div>
-
-                          {/* Expanded Content */}
-                          {isExpanded && (
-                            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-600">
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                <div>
-                                  <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>ტელეფონი:</p>
-                                  <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    {message.phone || 'არ არის მითითებული'}
-                                  </p>
-                                </div>
-                                <div>
-                                  <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>სრული თარიღი:</p>
-                                  <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    {new Date(message.created_at).toLocaleString('ka-GE')}
-                                  </p>
-                                </div>
-                              </div>
-                              
-                              <div className="mb-6">
-                                <p className={`text-xs mb-2 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>სრული შეტყობინება:</p>
-                                <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-600' : 'bg-gray-100'}`}>
-                                  <p className={`text-sm leading-relaxed ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                                    {message.message}
-                                  </p>
-                                </div>
-                              </div>
-
-                              {/* Action Buttons */}
-                              <div className="flex gap-3">
-                                {message.status !== 'read' && message.status !== 'replied' && (
-                                  <Button 
-                                    size="sm" 
-                                    variant="outline"
-                                    className={`${
-                                      darkMode 
-                                        ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
-                                        : 'border-gray-300 text-gray-700 hover:bg-gray-100'
-                                    }`}
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      updateMessageStatus(message.id, 'read');
-                                    }}
-                                  >
-                                    ✓ წაკითხულად მონიშვნა
-                                  </Button>
-                                )}
-                                {message.status !== 'replied' && (
-                                  <Button 
-                                    size="sm" 
-                                    className="bg-green-600 hover:bg-green-700 text-white"
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      updateMessageStatus(message.id, 'replied');
-                                    }}
-                                  >
-                                    ✉️ პასუხგაცემულად მონიშვნა
-                                  </Button>
-                                )}
-                                <Button 
-                                  size="sm" 
-                                  variant="outline"
-                                  className="text-blue-600 border-blue-300 hover:bg-blue-50"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    window.open(`mailto:${message.email}?subject=Re: ${message.subject}`, '_self');
-                                  }}
-                                >
-                                  📧 პასუხის გაგზავნა
-                                </Button>
-                              </div>
+                          
+                          <div className="flex items-center gap-2">
+                            <Badge variant="outline" className={`${
+                              message.status === 'new' ? 'bg-red-50 text-red-700 border-red-200' :
+                              message.status === 'replied' ? 'bg-green-50 text-green-700 border-green-200' :
+                              'bg-gray-50 text-gray-700 border-gray-200'
+                            }`}>
+                              {message.status === 'new' ? 'ახალი' : 
+                               message.status === 'read' ? 'წაკითხული' : 
+                               message.status === 'replied' ? 'პასუხგაცემული' : message.status}
+                            </Badge>
+                            <span className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                              {formatDateTime(message.created_at)}
+                            </span>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      
+                      <CardContent className="pt-0">
+                        {/* Subject & Preview */}
+                        <div className="mb-4">
+                          <h4 className={`text-base font-semibold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                            📝 {message.subject}
+                          </h4>
+                          {!isExpanded ? (
+                            <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'} line-clamp-2`}>
+                              {message.message.length > 120 
+                                ? `${message.message.substring(0, 120)}...` 
+                                : message.message}
+                            </p>
+                          ) : (
+                            <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
+                              <p className={`text-sm leading-relaxed ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                                {message.message}
+                              </p>
                             </div>
                           )}
                         </div>
-                      </div>
-                    );
-                  })}
-                
-                {contactMessages.length === 0 && (
-                  <div className="px-6 py-12 text-center">
-                    <MessageSquare className={`mx-auto h-12 w-12 ${darkMode ? 'text-gray-400' : 'text-gray-300'}`} />
-                    <h3 className={`mt-2 text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-900'}`}>
+
+                        {/* Contact Info - Always Visible */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                          {message.phone && (
+                            <div className="flex items-center gap-2">
+                              <Phone className={`w-4 h-4 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />
+                              <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                {message.phone}
+                              </span>
+                            </div>
+                          )}
+                          <div className="flex items-center gap-2">
+                            <Calendar className={`w-4 h-4 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+                            <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                              {new Date(message.created_at).toLocaleDateString('ka-GE')}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Action Buttons */}
+                        <div className="flex gap-2 pt-3 border-t border-opacity-20" style={{ borderColor: darkMode ? '#374151' : '#e5e7eb' }}>
+                          {message.status !== 'read' && message.status !== 'replied' && (
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              className={`${
+                                darkMode 
+                                  ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
+                                  : 'border-gray-300 text-gray-700 hover:bg-gray-100'
+                              }`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                updateMessageStatus(message.id, 'read');
+                              }}
+                            >
+                              <Eye className="w-3 h-3 mr-1" />
+                              წაკითხვა
+                            </Button>
+                          )}
+                          {message.status !== 'replied' && (
+                            <Button 
+                              size="sm" 
+                              className="bg-green-600 hover:bg-green-700 text-white"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                updateMessageStatus(message.id, 'replied');
+                              }}
+                            >
+                              <CheckCircle className="w-3 h-3 mr-1" />
+                              პასუხი
+                            </Button>
+                          )}
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            className={`${
+                              darkMode 
+                                ? 'border-blue-600 text-blue-400 hover:bg-blue-800 hover:bg-opacity-20' 
+                                : 'border-blue-300 text-blue-600 hover:bg-blue-50'
+                            }`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              window.open(`mailto:${message.email}?subject=Re: ${message.subject}`, '_self');
+                            }}
+                          >
+                            <Mail className="w-3 h-3 mr-1" />
+                            ემაილი
+                          </Button>
+                          {message.phone && (
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              className={`${
+                                darkMode 
+                                  ? 'border-green-600 text-green-400 hover:bg-green-800 hover:bg-opacity-20' 
+                                  : 'border-green-300 text-green-600 hover:bg-green-50'
+                              }`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                window.open(`tel:${message.phone}`, '_self');
+                              }}
+                            >
+                              <Phone className="w-3 h-3 mr-1" />
+                              ზარი
+                            </Button>
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              
+              {contactMessages.length === 0 && (
+                <Card className={`${darkMode ? 'bg-gray-800 border-gray-600' : 'bg-white border-gray-200'} shadow-sm`}>
+                  <CardContent className="py-12 text-center">
+                    <MessageSquare className={`mx-auto h-16 w-16 ${darkMode ? 'text-gray-400' : 'text-gray-300'} mb-4`} />
+                    <h3 className={`text-xl font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-900'} mb-2`}>
                       შეტყობინებები არ არის
                     </h3>
-                    <p className={`mt-1 text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                    <p className={`${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                       ახალი კონტაქტის შეტყობინებები აქ გამოჩნდება
                     </p>
-                  </div>
-                )}
-              </div>
+                  </CardContent>
+                </Card>
+              )}
             </div>
           </div>
         )}
