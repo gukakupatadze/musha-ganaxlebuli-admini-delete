@@ -142,11 +142,11 @@ export const services = [
   },
   {
     id: 4,
-    icon: "Search",
+    icon: "Layers",
     titleKey: "forensicRecovery",
     descKey: "forensicRecoveryDesc",
-    features: ["Legal Documentation", "Chain of Custody", "Expert Testimony", "Court Admissible"],
-    price: "დან 300₾"
+    features: ["RAID 0, 1, 5, 6, 10", "კონტროლერის პრობლემები", "Virtual RAID", "NAS სისტემები"],
+    price: "400₾ დან"
   }
 ];
 
