@@ -20,7 +20,8 @@ const Services = ({ language }) => {
       Zap,        // ელექტრული/სწრაფი - კარგია SSD-ისთვის
       Database,   // მონაცემები
       Cpu,        // პროცესორი/ჩიპი
-      Server      // სერვერი/ტექნოლოგია
+      Server,     // სერვერი/ტექნოლოგია
+      CreditCard  // ბარათი - კარგია USB/SD/microSD-ისთვის
     };
     return icons[iconName] || HardDrive;
   };
