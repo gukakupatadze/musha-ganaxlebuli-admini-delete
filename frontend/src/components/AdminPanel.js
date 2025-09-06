@@ -1222,19 +1222,6 @@ const AdminPanel = () => {
                                   </span>
                                 </div>
                               )}
-                              <div className="flex items-center gap-2">
-                                <Calendar className={`w-3 h-3 ${darkMode ? 'text-gray-300' : 'text-gray-500'}`} />
-                                <span className={`text-sm ${darkMode ? 'text-gray-100' : 'text-gray-700'}`}>
-                                  {new Date(request.created_at).toLocaleString('ka-GE', {
-                                    year: 'numeric',
-                                    month: 'long', 
-                                    day: 'numeric',
-                                    hour: '2-digit',
-                                    minute: '2-digit',
-                                    hour12: false
-                                  })}
-                                </span>
-                              </div>
                             </div>
 
                             {/* Full Problem Description */}
