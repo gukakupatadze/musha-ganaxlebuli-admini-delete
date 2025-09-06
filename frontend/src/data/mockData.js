@@ -134,7 +134,7 @@ export const services = [
   },
   {
     id: 3,
-    icon: "CreditCard",
+    icon: "Usb",
     titleKey: "hardwareRepair",
     descKey: "hardwareRepairDesc",
     features: ["ფიზიკური დაზიანება", "კონტროლერის პრობლემები", "ფორმატირების შემდეგ", "NAND ჩიპები"],
