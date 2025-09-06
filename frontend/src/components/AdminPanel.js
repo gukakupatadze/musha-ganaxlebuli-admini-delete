@@ -735,267 +735,379 @@ const AdminPanel = () => {
           />
         )}
 
-        {/* Service Requests Tab */}
+        {/* Service Requests Tab - Gmail Style */}
         {activeTab === 'service-requests' && (
-          <div className="space-y-6">
-            <h2 className={`text-2xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-black'}`}>📋 სერვისის მოთხოვნები</h2>
-            {/* Enhanced Filters */}
-            <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} p-6 rounded-lg shadow-sm border ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-              <div className="flex flex-col md:flex-row gap-4">
-                <div className="flex-1">
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                    <Input
-                      placeholder="ძებნა case ID, email, ტელეფონის ნომრით, სახელით ან მოწყობილობის ტიპით..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className={`pl-10 ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900'}`}
-                    />
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  <select
-                    value={filterStatus}
-                    onChange={(e) => setFilterStatus(e.target.value)}
-                    className={`px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
-                      darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
-                    }`}
-                  >
-                    <option value="all">ყველა სტატუსი</option>
-                    <option value="unread">წაუკითხავი</option>
-                    <option value="pending">მომლოდინე</option>
-                    <option value="in_progress">მიმდინარე</option>
-                    <option value="completed">დასრულებული</option>
-                  </select>
-                  <Button variant="outline" size="sm" className={`${darkMode ? 'bg-gray-700 border-gray-600 text-white hover:bg-gray-600' : 'bg-white border-gray-300 text-gray-900 hover:bg-gray-50'}`}>
-                    <Filter className="h-4 w-4 mr-2" />
-                    ფილტრი
-                  </Button>
-                </div>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-black'}`}>📋 სერვისის მოთხოვნები</h2>
+              <div className="flex items-center gap-2">
+                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 text-xs">
+                  სულ: {serviceRequests.length}
+                </Badge>
+                <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200 text-xs">
+                  ახალი: {serviceRequests.filter(r => r.status === 'unread' || !r.is_read).length}
+                </Badge>
+                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 text-xs">
+                  კანბანში: {serviceRequests.filter(r => r.approved_for_kanban).length}
+                </Badge>
               </div>
             </div>
 
-            {/* Service Requests Content */}
-            <div className="grid gap-4">
-              {filteredRequests.map((request) => (
-                <Card key={request.id} className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white'} shadow-sm ${getBorderColor(request.status, request.is_read)}`}>
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        {getStatusIcon(request.status)}
-                        <div>
-                          <CardTitle className={`${darkMode ? 'text-white' : 'text-gray-800'} flex items-center text-lg`}>
-                            <span>{request.case_id}</span>
-                            {(!request.is_read || request.status === 'unread') && (
-                              <Eye 
-                                className="w-4 h-4 ml-2 text-red-500 cursor-pointer hover:text-red-700" 
-                                onClick={() => markAsRead(request.id)}
-                                title="წაკითხულად მონიშვნა"
-                              />
-                            )}
-                          </CardTitle>
-                          <CardDescription className={darkMode ? 'text-gray-300' : 'text-gray-600'}>
-                            {request.name} - {request.email}
-                          </CardDescription>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Badge variant="outline" className={getStatusColor(request.status, request.is_read)}>
-                          {request.status === 'unread' ? 'წაუკითხავი' :
-                           request.status === 'pending' ? 'ლოდინაში' : 
-                           request.status === 'in_progress' ? 'მუშავდება' : 
-                           request.status === 'completed' ? 'დასრულებული' : request.status}
-                        </Badge>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    {/* Compact Info Grid - 5 columns */}
-                    <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
-                      <div>
-                        <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>მოწყობილობა</p>
-                        <p className={`text-sm font-medium ${darkMode ? 'text-white' : 'text-gray-800'}`}>{request.device_type.toUpperCase()}</p>
-                      </div>
-                      <div>
-                        <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>სისწრაფე</p>
-                        <p className={`text-sm font-medium ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-                          {request.urgency === 'low' ? 'დაბალი' :
-                           request.urgency === 'medium' ? 'საშუალო' :
-                           request.urgency === 'high' ? 'მაღალი' :
-                           request.urgency === 'critical' ? 'კრიტიკული' : request.urgency}
-                        </p>
-                      </div>
-                      <div>
-                        <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>ტელეფონი</p>
-                        <p className={`text-sm font-medium ${darkMode ? 'text-white' : 'text-gray-800'}`}>{request.phone}</p>
-                      </div>
-                      <div>
-                        <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>შექმნა</p>
-                        <p className={`text-sm font-medium ${darkMode ? 'text-white' : 'text-gray-800'}`}>{new Date(request.created_at).toLocaleDateString('ka-GE')}</p>
-                      </div>
-                      <div>
-                        <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>დასრულება</p>
-                        <p className={`text-sm font-medium ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-                          {request.completed_at ? new Date(request.completed_at).toLocaleDateString('ka-GE') : 'N/A'}
-                        </p>
-                      </div>
-                    </div>
+            {/* Enhanced Search and Filters */}
+            <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} p-3 rounded-lg shadow-sm border ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+              <div className="flex gap-2">
+                <div className="flex-1 relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-3 w-3 text-gray-400" />
+                  <Input
+                    placeholder="ძებნა case ID, email, ტელეფონი, სახელი..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className={`pl-8 text-sm ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900'}`}
+                  />
+                </div>
+                <select
+                  value={filterStatus}
+                  onChange={(e) => setFilterStatus(e.target.value)}
+                  className={`px-3 py-1 text-sm border rounded-md ${
+                    darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
+                  }`}
+                >
+                  <option value="all">ყველა</option>
+                  <option value="unread">ახალი</option>
+                  <option value="pending">მომლოდინე</option>
+                  <option value="in_progress">მუშავდება</option>
+                  <option value="completed">დასრულებული</option>
+                </select>
+              </div>
+            </div>
 
-                    {/* Price Section - Standard Size */}
-                    <div className="mb-4 flex items-center gap-4">
-                      <div>
-                        <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>ფასი</p>
-                        {editingPrice === request.id ? (
-                          <div className="flex items-center gap-2">
-                            <Input
-                              type="number"
-                              value={priceInput}
-                              onChange={(e) => setPriceInput(e.target.value)}
-                              placeholder="ფასი ლარებში"
-                              className={`w-24 h-8 text-sm ${
-                                darkMode 
-                                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
-                                  : 'bg-white border-gray-300 text-gray-900'
-                              }`}
-                            />
-                            <Button size="sm" onClick={() => updateServicePrice(request.id, priceInput)} className="bg-green-600 hover:bg-green-700 text-white h-8 px-3 text-xs">
-                              ✓
-                            </Button>
-                            <Button size="sm" variant="outline" onClick={cancelPriceEdit} className={`h-8 px-3 text-xs ${
-                              darkMode ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-100'
-                            }`}>
-                              ✗
-                            </Button>
+            {/* Service Requests Compact List - Gmail Style */}
+            <div className="space-y-1">
+              {filteredRequests
+                .sort((a, b) => {
+                  // Priority 1: Status - unread first
+                  if ((!a.is_read || a.status === 'unread') && (b.is_read && b.status !== 'unread')) return -1;
+                  if ((a.is_read && a.status !== 'unread') && (!b.is_read || b.status === 'unread')) return 1;
+                  
+                  // Priority 2: Date - newest first
+                  return new Date(b.created_at) - new Date(a.created_at);
+                })
+                .map((request) => {
+                  const isUnread = !request.is_read || request.status === 'unread';
+                  const isExpanded = editingRequest === request.id;
+                  
+                  return (
+                    <Card 
+                      key={request.id}
+                      className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} cursor-pointer transition-all duration-200 ${
+                        isUnread ? 'bg-blue-900/30 dark:bg-blue-900/30 border-l-4 border-l-blue-500 font-semibold' : ''
+                      } ${
+                        request.approved_for_kanban ? 'border-l-4 border-l-green-500' : ''
+                      } ${
+                        isExpanded ? 'shadow-md' : 'hover:shadow-sm'
+                      }`}
+                      onClick={() => !isExpanded ? setEditingRequest(request.id) : null}
+                    >
+                      {/* Compact Row */}
+                      <div className="px-4 py-2">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3 flex-1 min-w-0">
+                            {/* Status Dot */}
+                            <div className={`w-2 h-2 rounded-full flex-shrink-0 ${
+                              isUnread 
+                                ? 'bg-blue-500' 
+                                : request.status === 'completed' 
+                                  ? 'bg-green-500'
+                                  : request.status === 'in_progress'
+                                    ? 'bg-yellow-500'
+                                    : 'bg-gray-400'
+                            }`}></div>
+                            
+                            {/* Case ID & Name - Compact */}
+                            <div className="flex-shrink-0 w-32">
+                              <p className={`text-sm font-semibold truncate ${
+                                isUnread 
+                                  ? darkMode ? 'text-white' : 'text-gray-900'
+                                  : darkMode ? 'text-gray-100' : 'text-gray-700'
+                              }`}>
+                                {request.case_id}
+                              </p>
+                              <p className={`text-xs truncate ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                                {request.name}
+                              </p>
+                            </div>
+                            
+                            {/* Device Type & Email - One Line */}
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <span className={`text-sm font-medium ${
+                                  isUnread 
+                                    ? darkMode ? 'text-white' : 'text-gray-900'
+                                    : darkMode ? 'text-gray-200' : 'text-gray-700'
+                                }`}>
+                                  {request.device_type.toUpperCase()}
+                                </span>
+                                {!isExpanded && (
+                                  <span className={`text-sm truncate ${darkMode ? 'text-gray-300' : 'text-gray-500'}`}>
+                                    - {request.email}
+                                  </span>
+                                )}
+                              </div>
+                              {!isExpanded && (
+                                <p className={`text-xs truncate mt-1 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                  {request.problem_description.length > 60 
+                                    ? `${request.problem_description.substring(0, 60)}...` 
+                                    : request.problem_description}
+                                </p>
+                              )}
+                            </div>
                           </div>
-                        ) : (
-                          <p className={`text-sm font-medium ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-                            {request.price ? `${request.price}₾` : 'არ არის მითითებული'}
-                          </p>
-                        )}
-                      </div>
-                    </div>
+                          
+                          {/* Status Badge & Price & Date - Compact */}
+                          <div className="flex items-center gap-2 flex-shrink-0">
+                            <Badge 
+                              variant="outline" 
+                              className={`text-xs px-2 py-0 ${getStatusColor(request.status, request.is_read)}`}
+                            >
+                              {request.status === 'unread' ? 'ახალი' :
+                               request.status === 'pending' ? 'ლოდინა' : 
+                               request.status === 'in_progress' ? 'მუშავდება' : 
+                               request.status === 'completed' ? 'დასრულებული' : request.status}
+                            </Badge>
+                            {request.price && (
+                              <Badge variant="outline" className="text-xs px-2 py-0 bg-green-50 text-green-700 border-green-200">
+                                {request.price}₾
+                              </Badge>
+                            )}
+                            <span className={`text-xs ${darkMode ? 'text-gray-300' : 'text-gray-500'} w-16 text-right`}>
+                              {formatDateTime(request.created_at)}
+                            </span>
+                          </div>
+                        </div>
 
-                    {/* Problem Description - Beautiful Section */}
-                    <div className="mb-4 p-3 rounded-lg bg-opacity-20" style={{ backgroundColor: darkMode ? '#374151' : '#f3f4f6' }}>
-                      <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'} mb-2`}>პრობლემის აღწერა</p>
-                      <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'} leading-relaxed`}>
-                        {request.problem_description}
-                      </p>
-                    </div>
-                    
-                    {/* Action Buttons - Two Rows */}
-                    <div className="space-y-2">
-                      {/* Status Action Buttons */}
-                      <div className="flex gap-2 flex-wrap">
-                        {request.status === 'unread' && (
-                          <Button 
-                            size="sm" 
-                            variant="outline"
-                            className={`${darkMode ? 'border-orange-600 text-orange-400 hover:bg-orange-900 hover:bg-opacity-20' : 'border-orange-300 text-orange-700 hover:bg-orange-50'}`}
-                            onClick={() => updateServiceStatus(request.id, 'pending')}
-                          >
-                            ლოდინაში დაყენება
-                          </Button>
-                        )}
-                        {request.status !== 'in_progress' && request.status !== 'completed' && (
-                          <Button 
-                            size="sm" 
-                            className="bg-yellow-600 hover:bg-yellow-700 text-white"
-                            onClick={() => updateServiceStatus(request.id, 'in_progress')}
-                          >
-                            <Play className="w-3 h-3 mr-1" />
-                            დაწყება
-                          </Button>
-                        )}
-                        {request.status !== 'completed' && (
-                          <Button 
-                            size="sm" 
-                            className="bg-green-600 hover:bg-green-700 text-white"
-                            onClick={() => updateServiceStatus(request.id, 'completed')}
-                          >
-                            <CheckCircle className="w-3 h-3 mr-1" />
-                            დასრულება
-                          </Button>
-                        )}
-                        {request.status === 'completed' && (
-                          <Button 
-                            size="sm" 
-                            variant="outline"
-                            className={darkMode ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-100'}
-                            onClick={() => archiveServiceRequest(request.id)}
-                          >
-                            <Archive className="w-3 h-3 mr-1" />
-                            არქივი
-                          </Button>
+                        {/* Expanded Content - Edit Mode */}
+                        {isExpanded && (
+                          <div className="mt-3 pt-3 border-t border-opacity-20" style={{ borderColor: darkMode ? '#374151' : '#e5e7eb' }}>
+                            {/* Contact Info - Side by Side, Closer */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-1 mb-3">
+                              <div className="flex items-center gap-2">
+                                <Mail className={`w-3 h-3 ${darkMode ? 'text-gray-300' : 'text-gray-500'}`} />
+                                <span 
+                                  className={`text-sm ${darkMode ? 'text-gray-100' : 'text-gray-700'} cursor-text select-text`}
+                                  onClick={(e) => e.stopPropagation()}
+                                  onMouseDown={(e) => e.stopPropagation()}
+                                >
+                                  {request.email}
+                                </span>
+                              </div>
+                              {request.phone && (
+                                <div className="flex items-center gap-2">
+                                  <Phone className={`w-3 h-3 ${darkMode ? 'text-gray-300' : 'text-gray-500'}`} />
+                                  <span 
+                                    className={`text-sm ${darkMode ? 'text-gray-100' : 'text-gray-700'} cursor-text select-text`}
+                                    onClick={(e) => e.stopPropagation()}
+                                    onMouseDown={(e) => e.stopPropagation()}
+                                  >
+                                    {request.phone}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Edit Form Fields */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                              <div>
+                                <label className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'} mb-1 block`}>სახელი</label>
+                                <Input
+                                  value={editRequestForm.name}
+                                  onChange={(e) => setEditRequestForm({...editRequestForm, name: e.target.value})}
+                                  onClick={(e) => e.stopPropagation()}
+                                  className={`text-sm ${darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
+                                />
+                              </div>
+                              <div>
+                                <label className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'} mb-1 block`}>მოწყობილობა</label>
+                                <select
+                                  value={editRequestForm.device_type}
+                                  onChange={(e) => setEditRequestForm({...editRequestForm, device_type: e.target.value})}
+                                  onClick={(e) => e.stopPropagation()}
+                                  className={`w-full text-sm p-2 border rounded-md ${darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
+                                >
+                                  <option value="hdd">HDD</option>
+                                  <option value="ssd">SSD</option>
+                                  <option value="usb">USB</option>
+                                  <option value="sd">SD Card</option>
+                                  <option value="raid">RAID</option>
+                                </select>
+                              </div>
+                            </div>
+
+                            {/* Problem Description */}
+                            <div className="mb-4">
+                              <label className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'} mb-1 block`}>📝 პრობლემის აღწერა</label>
+                              <textarea
+                                value={editRequestForm.problem_description}
+                                onChange={(e) => setEditRequestForm({...editRequestForm, problem_description: e.target.value})}
+                                onClick={(e) => e.stopPropagation()}
+                                onFocus={(e) => e.stopPropagation()}
+                                onMouseDown={(e) => e.stopPropagation()}
+                                className={`w-full p-2 text-sm rounded-md border resize-none ${
+                                  darkMode 
+                                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                                    : 'bg-white border-gray-300 text-gray-900'
+                                }`}
+                                rows="3"
+                              />
+                            </div>
+
+                            {/* Admin Comment */}
+                            <div className="mb-4">
+                              <label className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'} mb-1 block`}>💬 ადმინის კომენტარი</label>
+                              <textarea
+                                placeholder="დაამატეთ კომენტარი - რა მუშაობა ჩატარდა..."
+                                className={`w-full p-2 text-sm rounded-md border resize-none ${
+                                  darkMode 
+                                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                                    : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                                }`}
+                                rows="2"
+                                defaultValue={request.admin_comment || ''}
+                                onClick={(e) => e.stopPropagation()}
+                                onFocus={(e) => e.stopPropagation()}
+                                onMouseDown={(e) => e.stopPropagation()}
+                                onBlur={(e) => updateRequestComment(request.id, e.target.value)}
+                              />
+                            </div>
+
+                            {/* Action Buttons - Only When Expanded */}
+                            <div className="flex gap-2 flex-wrap">
+                              {/* Save & Cancel Buttons */}
+                              <Button 
+                                size="sm" 
+                                className="bg-green-600 hover:bg-green-700 text-white text-xs"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  saveEditRequest(request.id);
+                                }}
+                              >
+                                <Save className="w-3 h-3 mr-1" />
+                                შენახვა
+                              </Button>
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                className={`text-xs ${darkMode ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-100'}`}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  cancelEditRequest();
+                                }}
+                              >
+                                <X className="w-3 h-3 mr-1" />
+                                გაუქმება
+                              </Button>
+
+                              {/* Status Action Buttons */}
+                              {request.status !== 'completed' && (
+                                <Button 
+                                  size="sm" 
+                                  className="bg-blue-600 hover:bg-blue-700 text-white text-xs"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    updateServiceStatus(request.id, 'completed');
+                                  }}
+                                >
+                                  <CheckCircle className="w-3 h-3 mr-1" />
+                                  დასრულება
+                                </Button>
+                              )}
+
+                              {/* Kanban & Archive */}
+                              {!request.approved_for_kanban && (
+                                <Button 
+                                  size="sm" 
+                                  className="bg-red-600 hover:bg-red-700 text-white text-xs"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    approveForKanban(request.id);
+                                  }}
+                                >
+                                  <Package className="w-3 h-3 mr-1" />
+                                  კანბანში
+                                </Button>
+                              )}
+                              
+                              {request.status === 'completed' && (
+                                <Button 
+                                  size="sm" 
+                                  variant="outline"
+                                  className={`text-xs ${darkMode ? 'border-purple-600 text-purple-400 hover:bg-purple-800 hover:bg-opacity-20' : 'border-purple-300 text-purple-600 hover:bg-purple-50'}`}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    archiveServiceRequest(request.id);
+                                  }}
+                                >
+                                  <Archive className="w-3 h-3 mr-1" />
+                                  არქივი
+                                </Button>
+                              )}
+
+                              {/* Contact Buttons */}
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                className={`text-xs ${
+                                  darkMode 
+                                    ? 'border-blue-600 text-blue-400 hover:bg-blue-800 hover:bg-opacity-20' 
+                                    : 'border-blue-300 text-blue-600 hover:bg-blue-50'
+                                }`}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  window.open(`mailto:${request.email}?subject=Re: ${request.case_id}`, '_self');
+                                }}
+                              >
+                                <Mail className="w-3 h-3 mr-1" />
+                                ემაილი
+                              </Button>
+                              
+                              {request.phone && (
+                                <Button 
+                                  size="sm" 
+                                  variant="outline"
+                                  className={`text-xs ${
+                                    darkMode 
+                                      ? 'border-green-600 text-green-400 hover:bg-green-800 hover:bg-opacity-20' 
+                                      : 'border-green-300 text-green-600 hover:bg-green-50'
+                                  }`}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    window.open(`tel:${request.phone}`, '_self');
+                                  }}
+                                >
+                                  <Phone className="w-3 h-3 mr-1" />
+                                  ზარი
+                                </Button>
+                              )}
+                            </div>
+                          </div>
                         )}
                       </div>
-                      
-                      {/* Contact & Edit Actions */}
-                      <div className="flex gap-2 pt-2 border-t border-opacity-20" style={{ borderColor: darkMode ? '#374151' : '#e5e7eb' }}>
-                        {/* Kanban Approval Button */}
-                        {!request.approved_for_kanban && (
-                          <Button 
-                            size="sm" 
-                            className="bg-red-600 hover:bg-red-700 text-white"
-                            onClick={() => approveForKanban(request.id)}
-                          >
-                            <Package className="w-3 h-3 mr-1" />
-                            კანბანში დამატება
-                          </Button>
-                        )}
-                        {request.approved_for_kanban && (
-                          <Button 
-                            size="sm" 
-                            variant="outline"
-                            className={`${darkMode ? 'bg-red-900 bg-opacity-20 border-red-600 text-red-400' : 'bg-red-50 border-red-300 text-red-700'}`}
-                            disabled
-                          >
-                            <CheckCircle className="w-3 h-3 mr-1" />
-                            კანბანშია
-                          </Button>
-                        )}
-                        
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          className={`${darkMode ? 'bg-blue-900 bg-opacity-20 border-blue-600 text-blue-400 hover:bg-blue-800 hover:bg-opacity-30' : 'bg-blue-50 border-blue-300 text-blue-700 hover:bg-blue-100'}`}
-                          onClick={() => window.open(`tel:${request.phone}`, '_self')}
-                        >
-                          <Phone className="w-3 h-3 mr-1" />
-                          დარეკვა
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          className={`${darkMode ? 'bg-green-900 bg-opacity-20 border-green-600 text-green-400 hover:bg-green-800 hover:bg-opacity-30' : 'bg-green-50 border-green-300 text-green-700 hover:bg-green-100'}`}
-                          onClick={() => window.open(`mailto:${request.email}`, '_self')}
-                        >
-                          <Mail className="w-3 h-3 mr-1" />
-                          ემაილი
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          className={`${darkMode ? 'bg-purple-900 bg-opacity-20 border-purple-600 text-purple-400 hover:bg-purple-800 hover:bg-opacity-30' : 'bg-purple-50 border-purple-300 text-purple-700 hover:bg-purple-100'}`}
-                          onClick={() => startEditPrice(request.id, request.price)}
-                        >
-                          <DollarSign className="w-3 h-3 mr-1" />
-                          ფასი
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          className={`${darkMode ? 'bg-orange-900 bg-opacity-20 border-orange-600 text-orange-400 hover:bg-orange-800 hover:bg-orange-30' : 'bg-orange-50 border-orange-300 text-orange-700 hover:bg-orange-100'}`}
-                          onClick={() => startEditRequest(request)}
-                        >
-                          <Edit className="w-3 h-3 mr-1" />
-                          რედაქტირება
-                        </Button>
-                      </div>
-                    </div>
+                    </Card>
+                  );
+                })}
+              
+              {filteredRequests.length === 0 && (
+                <Card className={`${darkMode ? 'bg-gray-800 border-gray-600' : 'bg-white border-gray-200'}`}>
+                  <CardContent className="py-8 text-center">
+                    <FileText className={`mx-auto h-12 w-12 ${darkMode ? 'text-gray-400' : 'text-gray-300'} mb-3`} />
+                    <h3 className={`text-lg font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-900'} mb-1`}>
+                      მოთხოვნები არ არის
+                    </h3>
+                    <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                      ახალი მოთხოვნები აქ გამოჩნდება
+                    </p>
                   </CardContent>
                 </Card>
-              ))}
+              )}
             </div>
           </div>
         )}
