@@ -1326,8 +1326,8 @@ const AdminPanel = () => {
                         {/* Expanded Content */}
                         {isExpanded && (
                           <div className="mt-3 pt-3 border-t border-opacity-20" style={{ borderColor: darkMode ? '#374151' : '#e5e7eb' }}>
-                            {/* Contact Info */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                            {/* Contact Info - Left Side Both */}
+                            <div className="grid grid-cols-1 gap-3 mb-3">
                               <div className="flex items-center gap-2">
                                 <Mail className={`w-3 h-3 ${darkMode ? 'text-gray-300' : 'text-gray-500'}`} />
                                 <span className={`text-sm ${darkMode ? 'text-gray-100' : 'text-gray-700'}`}>
