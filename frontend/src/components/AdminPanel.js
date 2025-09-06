@@ -498,6 +498,18 @@ const AdminPanel = () => {
     }
   };
 
+  const cancelEditRequest = () => {
+    setEditingRequest(null);
+    setEditRequestForm({
+      name: '',
+      email: '',
+      phone: '',
+      device_type: '',
+      problem_description: '',
+      urgency: 'medium'
+    });
+  };
+
   const getBorderColor = (status, isRead = true) => {
     if (status === 'unread' || !isRead) {
       return 'border-red-500 border-2';
