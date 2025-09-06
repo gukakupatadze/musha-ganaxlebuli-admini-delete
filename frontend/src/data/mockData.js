@@ -137,7 +137,7 @@ export const services = [
     icon: "Wrench",
     titleKey: "hardwareRepair",
     descKey: "hardwareRepairDesc",
-    features: ["PCB Repair", "Head Replacement", "Component Repair", "Clean Room Service"],
+    features: ["ფიზიკური დაზიანება", "კონტროლერის პრობლემები", "ფორმატირების შემდეგ", "NAND მეხსიერება"],
     price: "დან 150₾"
   },
   {
