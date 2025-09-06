@@ -594,7 +594,13 @@ const KanbanBoard = ({ serviceRequests, updateServiceRequest, darkMode = false }
             {item.device_type?.toUpperCase() || 'უცნობი'}
           </div>
           <div className="text-xs text-gray-500">
-            {getTimeElapsed(item.created_at)}
+            {new Date(item.created_at).toLocaleString('ka-GE', {
+              year: 'numeric',
+              month: 'short', 
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            })}
           </div>
         </div>
 
