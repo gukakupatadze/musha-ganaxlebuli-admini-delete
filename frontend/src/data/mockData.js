@@ -121,7 +121,7 @@ export const services = [
     icon: "HardDrive",
     titleKey: "dataRecovery",
     descKey: "dataRecoveryDesc",
-    features: ["მექანიკური დაზიანება", "ლოგიკური კორუფცია", "ფაილების წაშლა / ფორმატირება", "SMART შეცდომები"],
+    features: ["მექანიკური დაზიანება", "ლოგიკური შეცდომა", "ფაილების წაშლა", "დისკი არ იკითხება"],
     price: "150₾ დან"
   },
   {
