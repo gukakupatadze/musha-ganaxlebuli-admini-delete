@@ -74,8 +74,8 @@ export const translations = {
     servicesTitle: "Our Services",
     servicesSubtitle: "We recover data using modern technologies and experienced specialists",
     
-    dataRecovery: "Data Recovery",
-    dataRecoveryDesc: "Data recovery from HDD, SSD, RAID, USB, SD cards",
+    dataRecovery: "HDD Recovery",
+    dataRecoveryDesc: "File recovery from damaged hard drives",
     
     dataBackup: "Data Backup Solutions",
     dataBackupDesc: "Regular backup and data security solutions",
