@@ -77,8 +77,8 @@ export const translations = {
     dataRecovery: "HDD Recovery",
     dataRecoveryDesc: "File recovery from damaged hard drives",
     
-    dataBackup: "Data Backup Solutions",
-    dataBackupDesc: "Regular backup and data security solutions",
+    dataBackup: "SSD Recovery",
+    dataBackupDesc: "File recovery from damaged SSD drives",
     
     hardwareRepair: "Hardware Repair",
     hardwareRepairDesc: "Repair of damaged data storage devices",
