@@ -1179,6 +1179,9 @@ const AdminPanel = () => {
                                 }`}
                                 rows="2"
                                 defaultValue={request.admin_comment || ''}
+                                onClick={(e) => e.stopPropagation()}
+                                onFocus={(e) => e.stopPropagation()}
+                                onMouseDown={(e) => e.stopPropagation()}
                                 onBlur={(e) => updateRequestComment(request.id, e.target.value)}
                               />
                             </div>
