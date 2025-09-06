@@ -1127,18 +1127,26 @@ const AdminPanel = () => {
                         {/* Expanded Content */}
                         {isExpanded && (
                           <div className="mt-3 pt-3 border-t border-opacity-20" style={{ borderColor: darkMode ? '#374151' : '#e5e7eb' }}>
-                            {/* Contact Info - Side by Side */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                            {/* Contact Info - Side by Side, Closer */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-1 mb-3">
                               <div className="flex items-center gap-2">
                                 <Mail className={`w-3 h-3 ${darkMode ? 'text-gray-300' : 'text-gray-500'}`} />
-                                <span className={`text-sm ${darkMode ? 'text-gray-100' : 'text-gray-700'}`}>
+                                <span 
+                                  className={`text-sm ${darkMode ? 'text-gray-100' : 'text-gray-700'} cursor-text select-text`}
+                                  onClick={(e) => e.stopPropagation()}
+                                  onMouseDown={(e) => e.stopPropagation()}
+                                >
                                   {request.email}
                                 </span>
                               </div>
                               {request.phone && (
                                 <div className="flex items-center gap-2">
                                   <Phone className={`w-3 h-3 ${darkMode ? 'text-gray-300' : 'text-gray-500'}`} />
-                                  <span className={`text-sm ${darkMode ? 'text-gray-100' : 'text-gray-700'}`}>
+                                  <span 
+                                    className={`text-sm ${darkMode ? 'text-gray-100' : 'text-gray-700'} cursor-text select-text`}
+                                    onClick={(e) => e.stopPropagation()}
+                                    onMouseDown={(e) => e.stopPropagation()}
+                                  >
                                     {request.phone}
                                   </span>
                                 </div>
