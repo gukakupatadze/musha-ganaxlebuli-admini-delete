@@ -1165,6 +1165,8 @@ const AdminPanel = () => {
                         // Accordion behavior - only one expanded at a time
                         setSelectedArchivedRequest(selectedArchivedRequest?.id === request.id ? null : request);
                       }}
+                      onScroll={(e) => e.stopPropagation()}
+                      onWheel={(e) => e.stopPropagation()}
                     >
                       {/* Compact Row */}
                       <div className="px-4 py-2">
