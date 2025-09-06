@@ -811,7 +811,15 @@ const AdminPanel = () => {
                       } ${
                         isExpanded ? 'shadow-md' : 'hover:shadow-sm'
                       }`}
-                      onClick={() => !isExpanded ? setEditingRequest(request.id) : null}
+                      onClick={() => {
+                        if (isExpanded) {
+                          // Close if already expanded
+                          setEditingRequest(null);  
+                        } else {
+                          // Open this one
+                          setEditingRequest(request.id);
+                        }
+                      }}
                       onScroll={(e) => e.stopPropagation()}
                       onWheel={(e) => e.stopPropagation()}
                     >
