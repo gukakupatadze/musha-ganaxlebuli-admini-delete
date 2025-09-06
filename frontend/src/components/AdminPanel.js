@@ -886,8 +886,15 @@ const AdminPanel = () => {
                                 {request.price}₾
                               </Badge>
                             )}
-                            <span className={`text-xs ${darkMode ? 'text-gray-300' : 'text-gray-500'} w-16 text-right`}>
-                              {formatDateTime(request.created_at)}
+                            <span className={`text-xs ${darkMode ? 'text-gray-300' : 'text-gray-500'} w-20 text-right`}>
+                              <div>{formatDateTime(request.created_at)}</div>
+                              <div className="text-xs opacity-75">
+                                {new Date(request.created_at).toLocaleDateString('ka-GE', { 
+                                  month: 'short', 
+                                  day: 'numeric',
+                                  year: 'numeric'
+                                })}
+                              </div>
                             </span>
                           </div>
                         </div>
