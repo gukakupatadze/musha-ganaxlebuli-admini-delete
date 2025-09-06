@@ -20,7 +20,7 @@ Georgian data recovery service website built with React.
 ## Environment Variables
 
 ```
-REACT_APP_BACKEND_URL=https://georgian-deploy.preview.emergentagent.com
+REACT_APP_BACKEND_URL=https://georgian-deployer.preview.emergentagent.com
 ```
 
 ## Development
