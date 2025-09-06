@@ -126,7 +126,7 @@ export const services = [
   },
   {
     id: 2,
-    icon: "HardDrive",
+    icon: "Zap",
     titleKey: "dataBackup",
     descKey: "dataBackupDesc",
     features: ["კონტროლერის დაზიანება", "Flash მეხსიერების ცვეთა", "Firmware კორუფცია", "NAND ჩიპები"],
