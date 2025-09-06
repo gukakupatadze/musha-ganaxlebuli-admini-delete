@@ -1324,9 +1324,6 @@ const KanbanBoard = ({ serviceRequests, updateServiceRequest, darkMode = false }
               darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'
             }`}>
               <div className="flex justify-between items-center">
-                <div className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                  ბოლოს განახლდა: {new Date(selectedCard.created_at).toLocaleString('ka-GE')}
-                </div>
                 <Button
                   onClick={() => setSelectedCard(null)}
                   variant="outline"
