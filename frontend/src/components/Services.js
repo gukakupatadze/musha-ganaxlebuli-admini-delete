@@ -64,7 +64,7 @@ const Services = ({ language }) => {
                 
                 <CardContent className="pt-2">
                   <div className="space-y-2 mb-10 mt-4">
-                    {service.features.map((feature, index) => (
+                    {(language === 'ka' ? service.features : service.features_en || service.features).map((feature, index) => (
                       <div key={index} className="flex items-center text-sm text-gray-300">
                         <ChevronRight className="w-4 h-4 text-red-accent mr-2 flex-shrink-0" />
                         {feature}
