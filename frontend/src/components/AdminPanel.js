@@ -1216,28 +1216,32 @@ const AdminPanel = () => {
           </div>
         )}
 
-        {/* Contact Messages Tab - Enhanced Card Style */}
+        {/* Contact Messages Tab - Gmail-style Compact */}
         {activeTab === 'contact-messages' && (
-          <div className="space-y-6">
+          <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-black'}`}>📧 კონტაქტის შეტყობინებები</h2>
-              <div className="flex items-center gap-3">
-                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+              <h2 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-black'}`}>📧 კონტაქტის შეტყობინებები</h2>
+              <div className="flex items-center gap-2">
+                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 text-xs">
                   სულ: {contactMessages.length}
                 </Badge>
-                <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">
+                <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200 text-xs">
                   ახალი: {contactMessages.filter(m => m.status === 'new').length}
                 </Badge>
               </div>
             </div>
 
-            {/* Messages Grid - Card Style */}
-            <div className="grid gap-4">
+            {/* Messages Compact List - Gmail Style */}
+            <div className="space-y-1">
               {contactMessages
                 .sort((a, b) => {
-                  // Sort by status first (new messages first), then by date (newest first)
+                  // Priority 1: Status - new/unread first
                   if (a.status === 'new' && b.status !== 'new') return -1;
                   if (a.status !== 'new' && b.status === 'new') return 1;
+                  if (a.status === 'read' && b.status === 'replied') return -1;
+                  if (a.status === 'replied' && b.status === 'read') return 1;
+                  
+                  // Priority 2: Date - newest first
                   return new Date(b.created_at) - new Date(a.created_at);
                 })
                 .map((message) => {
@@ -1247,181 +1251,191 @@ const AdminPanel = () => {
                   return (
                     <Card 
                       key={message.id}
-                      className={`${darkMode ? 'bg-gray-800 border-gray-600' : 'bg-white border-gray-200'} shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer ${
-                        isUnread ? 'ring-2 ring-blue-500 border-blue-500' : ''
+                      className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} cursor-pointer transition-all duration-200 ${
+                        isUnread ? 'bg-blue-50 dark:bg-blue-900/20 border-l-4 border-l-blue-500 font-semibold' : ''
                       } ${
-                        isExpanded ? 'shadow-lg' : ''
+                        isExpanded ? 'shadow-md' : 'hover:shadow-sm'
                       }`}
                       onClick={() => toggleMessageExpansion(message.id)}
                     >
-                      <CardHeader className="pb-3">
+                      {/* Compact Row */}
+                      <div className="px-4 py-2">
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-3 flex-1 min-w-0">
                             {/* Status Dot */}
-                            <div className={`w-3 h-3 rounded-full flex-shrink-0 ${
+                            <div className={`w-2 h-2 rounded-full flex-shrink-0 ${
                               isUnread 
-                                ? 'bg-blue-500 animate-pulse shadow-lg shadow-blue-500/50' 
+                                ? 'bg-blue-500' 
                                 : message.status === 'replied' 
                                   ? 'bg-green-500' 
                                   : 'bg-gray-400'
                             }`}></div>
                             
-                            {/* User Avatar */}
-                            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                              isUnread ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'
-                            }`}>
-                              <User className="w-5 h-5" />
-                            </div>
-                            
-                            <div>
-                              <CardTitle className={`text-lg ${darkMode ? 'text-white' : 'text-gray-900'} ${
-                                isUnread ? 'font-bold' : 'font-semibold'
+                            {/* Sender Name - Compact */}
+                            <div className="flex-shrink-0 w-32">
+                              <p className={`text-sm truncate ${
+                                isUnread 
+                                  ? darkMode ? 'text-white font-semibold' : 'text-gray-900 font-semibold'
+                                  : darkMode ? 'text-gray-300' : 'text-gray-700'
                               }`}>
                                 {message.name}
-                              </CardTitle>
-                              <CardDescription className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} text-sm`}>
-                                {message.email}
-                              </CardDescription>
+                              </p>
+                            </div>
+                            
+                            {/* Subject & Preview - One Line */}
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <span className={`text-sm font-medium ${
+                                  isUnread 
+                                    ? darkMode ? 'text-white' : 'text-gray-900'
+                                    : darkMode ? 'text-gray-300' : 'text-gray-700'
+                                }`}>
+                                  {message.subject}
+                                </span>
+                                {!isExpanded && (
+                                  <span className={`text-sm truncate ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                    - {message.message.length > 50 
+                                      ? `${message.message.substring(0, 50)}...` 
+                                      : message.message}
+                                  </span>
+                                )}
+                              </div>
                             </div>
                           </div>
                           
-                          <div className="flex items-center gap-2">
-                            <Badge variant="outline" className={`${
-                              message.status === 'new' ? 'bg-red-50 text-red-700 border-red-200' :
-                              message.status === 'replied' ? 'bg-green-50 text-green-700 border-green-200' :
-                              'bg-gray-50 text-gray-700 border-gray-200'
-                            }`}>
+                          {/* Status Badge & Time - Compact */}
+                          <div className="flex items-center gap-2 flex-shrink-0">
+                            <Badge 
+                              variant="outline" 
+                              className={`text-xs px-2 py-0 ${
+                                message.status === 'new' ? 'bg-red-50 text-red-700 border-red-200' :
+                                message.status === 'replied' ? 'bg-green-50 text-green-700 border-green-200' :
+                                'bg-gray-50 text-gray-600 border-gray-200'
+                              }`}
+                            >
                               {message.status === 'new' ? 'ახალი' : 
                                message.status === 'read' ? 'წაკითხული' : 
-                               message.status === 'replied' ? 'პასუხგაცემული' : message.status}
+                               message.status === 'replied' ? 'პასუხი' : message.status}
                             </Badge>
-                            <span className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                            <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'} w-16 text-right`}>
                               {formatDateTime(message.created_at)}
                             </span>
                           </div>
                         </div>
-                      </CardHeader>
-                      
-                      <CardContent className="pt-0">
-                        {/* Subject & Preview */}
-                        <div className="mb-4">
-                          <h4 className={`text-base font-semibold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                            📝 {message.subject}
-                          </h4>
-                          {!isExpanded ? (
-                            <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'} line-clamp-2`}>
-                              {message.message.length > 120 
-                                ? `${message.message.substring(0, 120)}...` 
-                                : message.message}
-                            </p>
-                          ) : (
-                            <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
-                              <p className={`text-sm leading-relaxed ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+
+                        {/* Expanded Content */}
+                        {isExpanded && (
+                          <div className="mt-3 pt-3 border-t border-opacity-20" style={{ borderColor: darkMode ? '#374151' : '#e5e7eb' }}>
+                            {/* Contact Info */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                              <div className="flex items-center gap-2">
+                                <Mail className={`w-3 h-3 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+                                <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                  {message.email}
+                                </span>
+                              </div>
+                              {message.phone && (
+                                <div className="flex items-center gap-2">
+                                  <Phone className={`w-3 h-3 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+                                  <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    {message.phone}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Full Message */}
+                            <div className="mb-4">
+                              <div className={`p-3 rounded-md text-sm leading-relaxed ${
+                                darkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-50 text-gray-800'
+                              }`}>
                                 {message.message}
-                              </p>
+                              </div>
                             </div>
-                          )}
-                        </div>
 
-                        {/* Contact Info - Always Visible */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                          {message.phone && (
-                            <div className="flex items-center gap-2">
-                              <Phone className={`w-4 h-4 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />
-                              <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                                {message.phone}
-                              </span>
+                            {/* Action Buttons - Only When Expanded */}
+                            <div className="flex gap-2">
+                              {message.status !== 'read' && message.status !== 'replied' && (
+                                <Button 
+                                  size="sm" 
+                                  variant="outline"
+                                  className={`text-xs ${
+                                    darkMode 
+                                      ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
+                                      : 'border-gray-300 text-gray-700 hover:bg-gray-100'
+                                  }`}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    updateMessageStatus(message.id, 'read');
+                                  }}
+                                >
+                                  <Eye className="w-3 h-3 mr-1" />
+                                  წაკითხვა
+                                </Button>
+                              )}
+                              {message.status !== 'replied' && (
+                                <Button 
+                                  size="sm" 
+                                  className="bg-green-600 hover:bg-green-700 text-white text-xs"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    updateMessageStatus(message.id, 'replied');
+                                  }}
+                                >
+                                  <CheckCircle className="w-3 h-3 mr-1" />
+                                  პასუხი
+                                </Button>
+                              )}
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                className={`text-xs ${
+                                  darkMode 
+                                    ? 'border-blue-600 text-blue-400 hover:bg-blue-800 hover:bg-opacity-20' 
+                                    : 'border-blue-300 text-blue-600 hover:bg-blue-50'
+                                }`}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  window.open(`mailto:${message.email}?subject=Re: ${message.subject}`, '_self');
+                                }}
+                              >
+                                <Mail className="w-3 h-3 mr-1" />
+                                ემაილი
+                              </Button>
+                              {message.phone && (
+                                <Button 
+                                  size="sm" 
+                                  variant="outline"
+                                  className={`text-xs ${
+                                    darkMode 
+                                      ? 'border-green-600 text-green-400 hover:bg-green-800 hover:bg-opacity-20' 
+                                      : 'border-green-300 text-green-600 hover:bg-green-50'
+                                  }`}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    window.open(`tel:${message.phone}`, '_self');
+                                  }}
+                                >
+                                  <Phone className="w-3 h-3 mr-1" />
+                                  ზარი
+                                </Button>
+                              )}
                             </div>
-                          )}
-                          <div className="flex items-center gap-2">
-                            <Calendar className={`w-4 h-4 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
-                            <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                              {new Date(message.created_at).toLocaleDateString('ka-GE')}
-                            </span>
                           </div>
-                        </div>
-
-                        {/* Action Buttons */}
-                        <div className="flex gap-2 pt-3 border-t border-opacity-20" style={{ borderColor: darkMode ? '#374151' : '#e5e7eb' }}>
-                          {message.status !== 'read' && message.status !== 'replied' && (
-                            <Button 
-                              size="sm" 
-                              variant="outline"
-                              className={`${
-                                darkMode 
-                                  ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
-                                  : 'border-gray-300 text-gray-700 hover:bg-gray-100'
-                              }`}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                updateMessageStatus(message.id, 'read');
-                              }}
-                            >
-                              <Eye className="w-3 h-3 mr-1" />
-                              წაკითხვა
-                            </Button>
-                          )}
-                          {message.status !== 'replied' && (
-                            <Button 
-                              size="sm" 
-                              className="bg-green-600 hover:bg-green-700 text-white"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                updateMessageStatus(message.id, 'replied');
-                              }}
-                            >
-                              <CheckCircle className="w-3 h-3 mr-1" />
-                              პასუხი
-                            </Button>
-                          )}
-                          <Button 
-                            size="sm" 
-                            variant="outline"
-                            className={`${
-                              darkMode 
-                                ? 'border-blue-600 text-blue-400 hover:bg-blue-800 hover:bg-opacity-20' 
-                                : 'border-blue-300 text-blue-600 hover:bg-blue-50'
-                            }`}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              window.open(`mailto:${message.email}?subject=Re: ${message.subject}`, '_self');
-                            }}
-                          >
-                            <Mail className="w-3 h-3 mr-1" />
-                            ემაილი
-                          </Button>
-                          {message.phone && (
-                            <Button 
-                              size="sm" 
-                              variant="outline"
-                              className={`${
-                                darkMode 
-                                  ? 'border-green-600 text-green-400 hover:bg-green-800 hover:bg-opacity-20' 
-                                  : 'border-green-300 text-green-600 hover:bg-green-50'
-                              }`}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                window.open(`tel:${message.phone}`, '_self');
-                              }}
-                            >
-                              <Phone className="w-3 h-3 mr-1" />
-                              ზარი
-                            </Button>
-                          )}
-                        </div>
-                      </CardContent>
+                        )}
+                      </div>
                     </Card>
                   );
                 })}
               
               {contactMessages.length === 0 && (
-                <Card className={`${darkMode ? 'bg-gray-800 border-gray-600' : 'bg-white border-gray-200'} shadow-sm`}>
-                  <CardContent className="py-12 text-center">
-                    <MessageSquare className={`mx-auto h-16 w-16 ${darkMode ? 'text-gray-400' : 'text-gray-300'} mb-4`} />
-                    <h3 className={`text-xl font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-900'} mb-2`}>
+                <Card className={`${darkMode ? 'bg-gray-800 border-gray-600' : 'bg-white border-gray-200'}`}>
+                  <CardContent className="py-8 text-center">
+                    <MessageSquare className={`mx-auto h-12 w-12 ${darkMode ? 'text-gray-400' : 'text-gray-300'} mb-3`} />
+                    <h3 className={`text-lg font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-900'} mb-1`}>
                       შეტყობინებები არ არის
                     </h3>
-                    <p className={`${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                    <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                       ახალი კონტაქტის შეტყობინებები აქ გამოჩნდება
                     </p>
                   </CardContent>
