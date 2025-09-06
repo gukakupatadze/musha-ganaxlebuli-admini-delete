@@ -20,8 +20,8 @@ export const translations = {
     dataRecovery: "HDD აღდგენა",
     dataRecoveryDesc: "დაზიანებული მყარი დისკებიდან ფაილების აღდგენა",
     
-    dataBackup: "მონაცემთა სარეზერვო კოპირება",
-    dataBackupDesc: "რეგულარული სარეზერვო კოპირება და მონაცემთა უსაფრთხოება",
+    dataBackup: "SSD აღდგენა",
+    dataBackupDesc: "დაზიანებული SSD დისკებიდან ფაილების აღდგენა",
     
     hardwareRepair: "აპარატული შეკეთება",
     hardwareRepairDesc: "დაზიანებული მონაცემთა შენახვის მოწყობილობების შეკეთება",
