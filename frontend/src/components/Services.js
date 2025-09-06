@@ -16,7 +16,11 @@ const Services = ({ language }) => {
       Shield, 
       Wrench,
       Search,
-      Camera
+      Camera,
+      Zap,        // ელექტრული/სწრაფი - კარგია SSD-ისთვის
+      Database,   // მონაცემები
+      Cpu,        // პროცესორი/ჩიპი
+      Server      // სერვერი/ტექნოლოგია
     };
     return icons[iconName] || HardDrive;
   };
