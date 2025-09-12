@@ -21,7 +21,10 @@ from database import get_session, init_db, close_db
 from sqlalchemy.ext.asyncio import AsyncSession
 
 # Import PostgreSQL route modules
-from routes import service_requests_pg, contact_pg, price_estimate_pg, testimonials_pg
+from routes.service_requests_pg import router as service_requests_router
+from routes.contact_pg import router as contact_router
+from routes.price_estimate_pg import router as price_estimate_router
+from routes.testimonials_pg import router as testimonials_router
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
