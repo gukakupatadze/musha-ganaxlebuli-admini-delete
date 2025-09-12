@@ -55,7 +55,7 @@ const PriceEstimation = ({ language }) => {
 
     try {
       setLoading(true);
-      const response = await axios.post(`${API}/price-estimate/`, {
+      const response = await axios.post(`${BACKEND_URL}/api/price-estimate/`, {
         device_type: formData.deviceType,
         problem_type: formData.problemType,
         urgency: formData.urgency
