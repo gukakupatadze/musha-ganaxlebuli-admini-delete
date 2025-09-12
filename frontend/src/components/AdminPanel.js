@@ -102,12 +102,13 @@ const AdminPanel = () => {
       setLoading(true);
       
       // Fetch all data in parallel
-      const [servicesRes, archivedRes, contactRes, testimonialsRes, statsRes] = await Promise.all([
+      const [servicesRes, archivedRes, contactRes, testimonialsRes, statsRes, kanbanRes] = await Promise.all([
         axios.get(`${BACKEND_URL}/api/service-requests/`),
         axios.get(`${BACKEND_URL}/api/service-requests/archived`),
         axios.get(`${BACKEND_URL}/api/contact/`),
         axios.get(`${BACKEND_URL}/api/testimonials/all`),
-        axios.get(`${BACKEND_URL}/api/contact/stats`)
+        axios.get(`${BACKEND_URL}/api/contact/stats`),
+        axios.get(`${BACKEND_URL}/api/service-requests/approved/kanban`)
       ]);
 
       setServiceRequests(servicesRes.data);
@@ -115,6 +116,9 @@ const AdminPanel = () => {
       setContactMessages(contactRes.data);
       setTestimonials(testimonialsRes.data);
       setStats(statsRes.data);
+      
+      // Store kanban tasks separately for analytics
+      window.kanbanTasks = kanbanRes.data;
 
     } catch (error) {
       console.error('Error fetching admin data:', error);
