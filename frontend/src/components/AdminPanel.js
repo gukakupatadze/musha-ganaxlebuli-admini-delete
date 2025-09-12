@@ -8,7 +8,7 @@ import { Textarea } from './ui/textarea';
 import { Label } from './ui/label';
 import { useToast } from '../hooks/use-toast';
 import axios from 'axios';
-// Removed AnalyticsDashboard - not needed for MVP
+import AnalyticsDashboard from './AnalyticsDashboard';
 
 import KanbanBoard from './KanbanBoardNew';
 
