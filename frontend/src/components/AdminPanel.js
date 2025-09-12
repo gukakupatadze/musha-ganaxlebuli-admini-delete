@@ -707,12 +707,10 @@ const AdminPanel = () => {
         
         {/* Dashboard Tab - Only Approved Kanban Requests */}
         {activeTab === 'dashboard' && (
-          <AnalyticsDashboard 
-            serviceRequests={approvedServiceRequests}
-            contactMessages={contactMessages}
-            testimonials={testimonials}
-            darkMode={darkMode}
-          />
+          <div className="p-6 text-center">
+            <h3 className="text-xl font-semibold mb-4">Analytics Dashboard</h3>
+            <p className="text-gray-400">Analytics feature coming soon...</p>
+          </div>
         )}
 
         {/* Kanban Board Tab */}
