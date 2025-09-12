@@ -205,7 +205,7 @@ const AdminPanel = () => {
 
   const updateMessageStatus = async (messageId, newStatus) => {
     try {
-      await axios.put(`${BACKEND_URL}/api/contact/${messageId}/status`, {
+      await axios.put(`${BACKEND_URL}/api/contact/${messageId}`, {
         status: newStatus
       });
       
@@ -216,6 +216,7 @@ const AdminPanel = () => {
       
       fetchAllData(); // Refresh data
     } catch (error) {
+      console.error('Error updating message status:', error);
       toast({
         title: 'შეცდომა',
         description: 'სტატუსის განახლება ვერ მოხერხდა',
