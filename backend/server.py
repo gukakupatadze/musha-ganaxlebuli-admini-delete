@@ -1,9 +1,13 @@
-from fastapi import FastAPI, APIRouter
+"""
+DataLab Georgia FastAPI Server
+Migrated from MongoDB to PostgreSQL
+"""
+
+from fastapi import FastAPI, APIRouter, Depends, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
-from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 from pathlib import Path
@@ -12,28 +16,36 @@ from typing import List
 import uuid
 from datetime import datetime
 
-# Import route modules
-from routes import service_requests, contact, price_estimate, testimonials
+# PostgreSQL imports
+from database import get_session, init_db, close_db
+from sqlalchemy.ext.asyncio import AsyncSession
+
+# Import PostgreSQL route modules
+from routes import service_requests_pg, contact_pg, price_estimate_pg, testimonials_pg
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-# MongoDB connection
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
-
-# Create the main app without a prefix
+# Create the main app
 app = FastAPI(
     title="DataLab Georgia API",
-    description="Data Recovery Service API",
-    version="1.0.0"
+    description="Data Recovery Service API - PostgreSQL Version",
+    version="2.0.0"
+)
+
+# CORS Middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
-# Define Models (keeping original status check for health monitoring)
+# Health check models
 class StatusCheck(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     client_name: str
@@ -45,99 +57,97 @@ class StatusCheckCreate(BaseModel):
 # Health check endpoints
 @api_router.get("/")
 async def root():
-    return {"message": "DataLab Georgia API is running", "status": "healthy"}
+    return {"message": "DataLab Georgia API is running", "status": "healthy", "database": "PostgreSQL"}
 
 @api_router.get("/health")
-async def health_check():
+async def health_check(session: AsyncSession = Depends(get_session)):
+    """Health check with database connectivity verification"""
     try:
         # Test database connection
-        await client.admin.command('ping')
+        result = await session.execute("SELECT 1")
+        db_status = "connected" if result else "disconnected"
+        
         return {
             "status": "healthy",
-            "database": "connected",
+            "database": db_status,
             "timestamp": datetime.utcnow().isoformat()
         }
     except Exception as e:
         return {
-            "status": "unhealthy", 
+            "status": "unhealthy",
             "database": "disconnected",
             "error": str(e),
             "timestamp": datetime.utcnow().isoformat()
         }
 
-@api_router.post("/status", response_model=StatusCheck)
-async def create_status_check(input: StatusCheckCreate):
-    status_dict = input.dict()
-    status_obj = StatusCheck(**status_dict)
-    _ = await db.status_checks.insert_one(status_obj.dict())
-    return status_obj
-
-@api_router.get("/status", response_model=List[StatusCheck])
-async def get_status_checks():
-    status_checks = await db.status_checks.find().to_list(1000)
-    return [StatusCheck(**status_check) for status_check in status_checks]
-
-# Include all route modules with proper prefixes
-api_router.include_router(service_requests.router, prefix="/service-requests")
-api_router.include_router(contact.router, prefix="/contact")
-api_router.include_router(price_estimate.router, prefix="/price-estimate")
-api_router.include_router(testimonials.router, prefix="/testimonials")
-
-# Include the main API router in the app
-app.include_router(api_router)
-
-# Static files serving for production deployment
-static_dir = ROOT_DIR / "static"
-if static_dir.exists():
-    app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
-    
-    # Serve React app for all non-API routes
-    @app.get("/{path:path}")
-    async def serve_react_app(path: str):
-        """Serve the React application for all non-API routes."""
-        # If requesting a file with extension, try to serve it
-        if "." in path and not path.startswith("api/"):
-            file_path = static_dir / path
-            if file_path.exists():
-                return FileResponse(file_path)
-        
-        # For all other routes, serve index.html (React Router will handle routing)
-        index_path = static_dir / "index.html"
-        if index_path.exists():
-            return FileResponse(index_path)
-        
-        # Fallback to API 404
-        return {"detail": "Not found"}
-
-# Root endpoint for API
-@app.get("/", include_in_schema=False)
-async def root():
-    return {"message": "DataLab Georgia API is running", "status": "healthy"}
-
-# Health check endpoint
-@app.get("/api/health", include_in_schema=False)
-async def health_check():
+@api_router.post("/status-check")
+async def create_status_check(status_check: StatusCheckCreate):
+    """Simple status check endpoint for monitoring"""
     return {
-        "status": "healthy",
-        "database": "connected",
-        "timestamp": datetime.utcnow().isoformat()
+        "id": str(uuid.uuid4()),
+        "client_name": status_check.client_name,
+        "timestamp": datetime.utcnow().isoformat(),
+        "status": "received"
     }
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_credentials=True,
-    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# Include all route modules
+api_router.include_router(service_requests_pg.router, prefix="/service-requests", tags=["service-requests"])
+api_router.include_router(contact_pg.router, prefix="/contact", tags=["contact"])
+api_router.include_router(price_estimate_pg.router, prefix="/price-estimate", tags=["price-estimate"])
+api_router.include_router(testimonials_pg.router, prefix="/testimonials", tags=["testimonials"])
+
+# Include API router in main app
+app.include_router(api_router)
+
+# Static file serving (frontend)
+static_dir = Path(__file__).parent.parent / "frontend" / "build"
+if static_dir.exists():
+    app.mount("/static", StaticFiles(directory=str(static_dir / "static")), name="static")
+    
+    @app.get("/{full_path:path}")
+    async def serve_frontend(full_path: str):
+        """Serve React frontend for all non-API routes"""
+        if full_path.startswith("api/"):
+            raise HTTPException(status_code=404, detail="API endpoint not found")
+        
+        file_path = static_dir / full_path
+        if file_path.exists() and file_path.is_file():
+            return FileResponse(file_path)
+        else:
+            # Return index.html for SPA routing
+            return FileResponse(static_dir / "index.html")
+
+# Application lifecycle events
+@app.on_event("startup")
+async def startup_event():
+    """Initialize database connection on startup"""
+    try:
+        await init_db()
+        logging.info("✅ PostgreSQL database initialized successfully")
+    except Exception as e:
+        logging.error(f"❌ Database initialization failed: {e}")
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Close database connections on shutdown"""
+    try:
+        await close_db()
+        logging.info("✅ Database connections closed successfully")
+    except Exception as e:
+        logging.error(f"❌ Error closing database connections: {e}")
 
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
-logger = logging.getLogger(__name__)
 
-@app.on_event("shutdown")
-async def shutdown_db_client():
-    client.close()
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(
+        "server:app",
+        host="0.0.0.0",
+        port=8001,
+        reload=True,
+        access_log=True
+    )
