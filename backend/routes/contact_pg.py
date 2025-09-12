@@ -182,3 +182,48 @@ async def delete_contact_message(
         await session.rollback()
         logging.error(f"Error deleting contact message {message_id}: {e}")
         raise HTTPException(status_code=500, detail="Failed to delete contact message")
+
+@router.get("/stats", response_model=dict)
+async def get_contact_stats(
+    session: AsyncSession = Depends(get_session)
+):
+    """Get contact message statistics for admin dashboard"""
+    try:
+        from sqlalchemy import func
+        
+        # Total messages
+        total_count = await session.scalar(
+            select(func.count(ContactMessageSQL.id))
+        )
+        
+        # New messages (unread)
+        new_count = await session.scalar(
+            select(func.count(ContactMessageSQL.id)).where(
+                ContactMessageSQL.status == 'new'
+            )
+        )
+        
+        # Read messages
+        read_count = await session.scalar(
+            select(func.count(ContactMessageSQL.id)).where(
+                ContactMessageSQL.status == 'read'
+            )
+        )
+        
+        # Replied messages
+        replied_count = await session.scalar(
+            select(func.count(ContactMessageSQL.id)).where(
+                ContactMessageSQL.status == 'replied'
+            )
+        )
+        
+        return {
+            "total": total_count or 0,
+            "new": new_count or 0,
+            "read": read_count or 0,
+            "replied": replied_count or 0
+        }
+        
+    except Exception as e:
+        logging.error(f"Error getting contact stats: {e}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve contact statistics")
