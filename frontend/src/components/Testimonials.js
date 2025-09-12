@@ -6,7 +6,6 @@ import { translations } from '../data/mockData';
 import axios from 'axios';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
 
 const Testimonials = ({ language }) => {
   const t = translations[language];
