@@ -309,3 +309,72 @@ async def delete_service_request(
         await session.rollback()
         logging.error(f"Error deleting service request {request_id}: {e}")
         raise HTTPException(status_code=500, detail="Failed to delete service request")
+
+@router.put("/{request_id}/archive", response_model=dict)
+async def archive_service_request(
+    request_id: str,
+    session: AsyncSession = Depends(get_session)
+):
+    """Archive service request by setting is_archived=True"""
+    try:
+        # Check if request exists
+        query = select(ServiceRequestSQL).where(ServiceRequestSQL.id == request_id)
+        result = await session.execute(query)
+        existing_request = result.scalar_one_or_none()
+        
+        if not existing_request:
+            raise HTTPException(status_code=404, detail="Service request not found")
+        
+        # Archive the request
+        stmt = update(ServiceRequestSQL).where(
+            ServiceRequestSQL.id == request_id
+        ).values(is_archived=True)
+        
+        await session.execute(stmt)
+        await session.commit()
+        
+        return {"success": True, "message": "Service request archived successfully"}
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        await session.rollback()
+        logging.error(f"Error archiving service request {request_id}: {e}")
+        raise HTTPException(status_code=500, detail="Failed to archive service request")
+
+@router.put("/{request_id}/complete", response_model=dict)
+async def complete_service_request(
+    request_id: str,
+    session: AsyncSession = Depends(get_session)
+):
+    """Mark service request as completed"""
+    try:
+        from datetime import datetime
+        
+        # Check if request exists
+        query = select(ServiceRequestSQL).where(ServiceRequestSQL.id == request_id)
+        result = await session.execute(query)
+        existing_request = result.scalar_one_or_none()
+        
+        if not existing_request:
+            raise HTTPException(status_code=404, detail="Service request not found")
+        
+        # Complete the request
+        stmt = update(ServiceRequestSQL).where(
+            ServiceRequestSQL.id == request_id
+        ).values(
+            status='completed',
+            completed_at=datetime.utcnow()
+        )
+        
+        await session.execute(stmt)
+        await session.commit()
+        
+        return {"success": True, "message": "Service request completed successfully"}
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        await session.rollback()
+        logging.error(f"Error completing service request {request_id}: {e}")
+        raise HTTPException(status_code=500, detail="Failed to complete service request")
