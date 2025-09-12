@@ -39,7 +39,7 @@ class ContactMessageCreate(BaseModel):
     message: str
 
 class ContactMessageUpdate(BaseModel):
-    status: Optional[str] = Field(None, regex=r'^(new|read|replied)$')
+    status: Optional[str] = Field(None, pattern=r'^(new|read|replied)$')
 
 class ContactMessageResponse(BaseModel):
     id: str
