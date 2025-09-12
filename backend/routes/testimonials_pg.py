@@ -191,3 +191,37 @@ async def delete_testimonial(
         await session.rollback()
         logging.error(f"Error deleting testimonial {testimonial_id}: {e}")
         raise HTTPException(status_code=500, detail="Failed to delete testimonial")
+
+@router.get("/all", response_model=List[TestimonialResponse])
+async def get_all_testimonials_admin(
+    session: AsyncSession = Depends(get_session)
+):
+    """Get all testimonials for admin panel (including inactive)"""
+    try:
+        query = select(TestimonialSQL).order_by(desc(TestimonialSQL.created_at))
+        
+        result = await session.execute(query)
+        testimonials = result.scalars().all()
+        
+        # Convert to response format
+        response_data = []
+        for testimonial in testimonials:
+            response_data.append(TestimonialResponse(
+                id=str(testimonial.id),
+                name=testimonial.name,
+                name_en=testimonial.name_en,
+                position=testimonial.position,
+                position_en=testimonial.position_en,
+                text_ka=testimonial.text_ka,
+                text_en=testimonial.text_en,
+                rating=testimonial.rating,
+                image=testimonial.image,
+                is_active=testimonial.is_active,
+                created_at=testimonial.created_at
+            ))
+        
+        return response_data
+        
+    except Exception as e:
+        logging.error(f"Error getting all testimonials for admin: {e}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve testimonials")
