@@ -340,17 +340,17 @@ const AnalyticsDashboard = ({ serviceRequests = [], contactMessages = [], testim
       {/* Additional Metrics */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Contact Messages */}
-        <Card className="bg-gray-800 border-gray-700">
+        <Card className="bg-gray-800 dark:bg-gray-800 bg-white border-gray-700 dark:border-gray-700 border-gray-200">
           <CardHeader>
-            <CardTitle className="text-white flex items-center gap-2">
+            <CardTitle className="text-white dark:text-white text-gray-900 flex items-center gap-2">
               <AlertCircle className="w-5 h-5 text-yellow-400" />
               კონტაქტების სტატისტიკა
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="flex justify-between">
-              <span className="text-gray-300">სულ შეტყობინება:</span>
-              <span className="text-white font-medium">{analytics.totalContacts}</span>
+              <span className="text-gray-300 dark:text-gray-300 text-gray-700">სულ შეტყობინება:</span>
+              <span className="text-white dark:text-white text-gray-900 font-medium">{analytics.totalContacts}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-300">ახალი:</span>
