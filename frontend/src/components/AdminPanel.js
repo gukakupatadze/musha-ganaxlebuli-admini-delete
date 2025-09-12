@@ -103,11 +103,11 @@ const AdminPanel = () => {
       
       // Fetch all data in parallel
       const [servicesRes, archivedRes, contactRes, testimonialsRes, statsRes] = await Promise.all([
-        axios.get(`${API}/service-requests/`),
-        axios.get(`${API}/service-requests/archived`),
-        axios.get(`${API}/contact/`),
-        axios.get(`${API}/testimonials/all`),
-        axios.get(`${API}/contact/stats`)
+        axios.get(`${BACKEND_URL}/api/service-requests/`),
+        axios.get(`${BACKEND_URL}/api/service-requests/archived`),
+        axios.get(`${BACKEND_URL}/api/contact/`),
+        axios.get(`${BACKEND_URL}/api/testimonials/all`),
+        axios.get(`${BACKEND_URL}/api/contact/stats`)
       ]);
 
       setServiceRequests(servicesRes.data);
@@ -130,7 +130,7 @@ const AdminPanel = () => {
 
   const updateServiceStatus = async (requestId, newStatus) => {
     try {
-      await axios.put(`${API}/service-requests/${requestId}`, {
+      await axios.put(`${BACKEND_URL}/api/service-requests/${requestId}`, {
         status: newStatus
       });
       
@@ -151,7 +151,7 @@ const AdminPanel = () => {
 
   const updateServicePrice = async (requestId, price) => {
     try {
-      await axios.put(`${API}/service-requests/${requestId}`, {
+      await axios.put(`${BACKEND_URL}/api/service-requests/${requestId}`, {
         price: parseFloat(price)
       });
       
@@ -174,7 +174,7 @@ const AdminPanel = () => {
 
   const archiveServiceRequest = async (requestId) => {
     try {
-      await axios.put(`${API}/service-requests/${requestId}/archive`);
+      await axios.put(`${BACKEND_URL}/api/service-requests/${requestId}/archive`);
       
       toast({
         title: 'წარმატება',
@@ -193,7 +193,7 @@ const AdminPanel = () => {
 
   const markAsRead = async (requestId) => {
     try {
-      await axios.put(`${API}/service-requests/${requestId}`, {
+      await axios.put(`${BACKEND_URL}/api/service-requests/${requestId}`, {
         is_read: true
       });
       
@@ -205,7 +205,7 @@ const AdminPanel = () => {
 
   const updateMessageStatus = async (messageId, newStatus) => {
     try {
-      await axios.put(`${API}/contact/${messageId}/status`, {
+      await axios.put(`${BACKEND_URL}/api/contact/${messageId}/status`, {
         status: newStatus
       });
       
@@ -240,7 +240,7 @@ const AdminPanel = () => {
 
   const updateServiceRequest = async (id, updates) => {
     try {
-      const response = await axios.put(`${API}/service-requests/${id}`, updates);
+      const response = await axios.put(`${BACKEND_URL}/api/service-requests/${id}`, updates);
       
       // Update the service requests in state
       setServiceRequests(prevRequests => 
@@ -304,7 +304,7 @@ const AdminPanel = () => {
   // Function to update archived request comment
   const updateRequestComment = async (requestId, comment) => {
     try {
-      await axios.put(`${API}/service-requests/${requestId}`, {
+      await axios.put(`${BACKEND_URL}/api/service-requests/${requestId}`, {
         admin_comment: comment
       });
       
@@ -377,7 +377,7 @@ const AdminPanel = () => {
 
   const saveEditRequest = async (requestId) => {
     try {
-      await axios.put(`${API}/service-requests/${requestId}`, editRequestForm);
+      await axios.put(`${BACKEND_URL}/api/service-requests/${requestId}`, editRequestForm);
       
       toast({
         title: 'წარმატება',
@@ -416,7 +416,7 @@ const AdminPanel = () => {
 
   const saveTestimonial = async (testimonialId) => {
     try {
-      await axios.put(`${API}/testimonials/${testimonialId}`, editForm);
+      await axios.put(`${BACKEND_URL}/api/testimonials/${testimonialId}`, editForm);
       
       toast({
         title: 'წარმატება',
@@ -436,7 +436,7 @@ const AdminPanel = () => {
 
   const toggleTestimonialStatus = async (testimonialId, currentStatus) => {
     try {
-      await axios.put(`${API}/testimonials/${testimonialId}`, {
+      await axios.put(`${BACKEND_URL}/api/testimonials/${testimonialId}`, {
         is_active: !currentStatus
       });
       
