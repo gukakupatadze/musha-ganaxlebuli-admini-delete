@@ -305,13 +305,13 @@ const AnalyticsDashboard = ({ serviceRequests = [], contactMessages = [], testim
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Status Distribution */}
-        <Card className="bg-gray-800 border-gray-700">
+        <Card className="bg-gray-800 dark:bg-gray-800 bg-white border-gray-700 dark:border-gray-700 border-gray-200">
           <CardHeader>
-            <CardTitle className="text-white flex items-center gap-2">
+            <CardTitle className="text-white dark:text-white text-gray-900 flex items-center gap-2">
               <PieChart className="w-5 h-5 text-blue-400" />
               სტატუსების განაწილება
             </CardTitle>
-            <CardDescription className="text-gray-400">
+            <CardDescription className="text-gray-400 dark:text-gray-400 text-gray-600">
               მოთხოვნების მდგომარეობა
             </CardDescription>
           </CardHeader>
@@ -321,13 +321,13 @@ const AnalyticsDashboard = ({ serviceRequests = [], contactMessages = [], testim
         </Card>
 
         {/* Device Types */}
-        <Card className="bg-gray-800 border-gray-700">
+        <Card className="bg-gray-800 dark:bg-gray-800 bg-white border-gray-700 dark:border-gray-700 border-gray-200">
           <CardHeader>
-            <CardTitle className="text-white flex items-center gap-2">
+            <CardTitle className="text-white dark:text-white text-gray-900 flex items-center gap-2">
               <BarChart3 className="w-5 h-5 text-green-400" />
               მოწყობილობების ტიპები
             </CardTitle>
-            <CardDescription className="text-gray-400">
+            <CardDescription className="text-gray-400 dark:text-gray-400 text-gray-600">
               მომსახურების კატეგორიები
             </CardDescription>
           </CardHeader>
