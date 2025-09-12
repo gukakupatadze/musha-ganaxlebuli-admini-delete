@@ -80,9 +80,12 @@ const CaseTracking = ({ language }) => {
         const response = await axios.get(`${BACKEND_URL}/api/service-requests/${caseId}`);
         
         // Add progress percentage for Service Requests based on their status
+        // If is_archived is true, override status to 'archived'
+        const actualStatus = response.data.is_archived ? 'archived' : response.data.status;
         const serviceRequestData = {
           ...response.data,
-          progress_percentage: getProgressPercentage(response.data.status),
+          status: actualStatus,
+          progress_percentage: response.data.is_archived ? 100 : getProgressPercentage(actualStatus),
           estimated_completion: response.data.estimated_completion || calculateEstimatedCompletion(response.data.created_at, response.data.urgency)
         };
         
