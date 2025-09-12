@@ -281,15 +281,15 @@ async def update_service_request(
         logging.error(f"Error updating service request {request_id}: {e}")
         raise HTTPException(status_code=500, detail="Failed to update service request")
 
-@router.delete("/{case_id}", response_model=dict)
+@router.delete("/{request_id}", response_model=dict)
 async def delete_service_request(
-    case_id: str,
+    request_id: str,
     session: AsyncSession = Depends(get_session)
 ):
-    """Delete service request"""
+    """Delete service request by ID (UUID)"""
     try:
         # Check if request exists
-        query = select(ServiceRequestSQL).where(ServiceRequestSQL.case_id == case_id)
+        query = select(ServiceRequestSQL).where(ServiceRequestSQL.id == request_id)
         result = await session.execute(query)
         existing_request = result.scalar_one_or_none()
         
@@ -297,7 +297,7 @@ async def delete_service_request(
             raise HTTPException(status_code=404, detail="Service request not found")
         
         # Delete request
-        stmt = delete(ServiceRequestSQL).where(ServiceRequestSQL.case_id == case_id)
+        stmt = delete(ServiceRequestSQL).where(ServiceRequestSQL.id == request_id)
         await session.execute(stmt)
         await session.commit()
         
@@ -307,5 +307,5 @@ async def delete_service_request(
         raise
     except Exception as e:
         await session.rollback()
-        logging.error(f"Error deleting service request {case_id}: {e}")
+        logging.error(f"Error deleting service request {request_id}: {e}")
         raise HTTPException(status_code=500, detail="Failed to delete service request")
