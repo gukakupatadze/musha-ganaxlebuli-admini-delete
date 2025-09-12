@@ -617,6 +617,11 @@ const AdminPanel = () => {
 
   // Filter only approved service requests for Dashboard analytics
   const approvedServiceRequests = serviceRequests.filter(request => request.approved_for_kanban === true);
+  
+  // Debug logging
+  console.log('🔧 AdminPanel - Total Service Requests:', serviceRequests.length);
+  console.log('🔧 AdminPanel - Approved Service Requests:', approvedServiceRequests.length);
+  console.log('🔧 AdminPanel - Approved Details:', approvedServiceRequests.map(r => ({ case_id: r.case_id, approved: r.approved_for_kanban })));
 
   return (
     <div className={`min-h-screen ${darkMode ? 'bg-gray-900' : 'bg-gray-100'} transition-colors duration-300`}>
