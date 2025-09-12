@@ -72,10 +72,12 @@ async def get_all_service_requests(
     status: Optional[str] = Query(None),
     session: AsyncSession = Depends(get_session)
 ):
-    """Get all service requests with optional filtering"""
+    """Get all non-archived service requests with optional filtering"""
     try:
-        # Build query
-        query = select(ServiceRequestSQL).order_by(desc(ServiceRequestSQL.created_at))
+        # Build query - exclude archived by default
+        query = select(ServiceRequestSQL).where(
+            ServiceRequestSQL.is_archived == False
+        ).order_by(desc(ServiceRequestSQL.created_at))
         
         if status:
             query = query.where(ServiceRequestSQL.status == status)
