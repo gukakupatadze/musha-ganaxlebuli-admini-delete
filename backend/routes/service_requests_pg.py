@@ -246,16 +246,16 @@ async def get_service_request(
         logging.error(f"Error getting service request {case_id}: {e}")
         raise HTTPException(status_code=500, detail="Failed to retrieve service request")
 
-@router.put("/{case_id}", response_model=dict)
+@router.put("/{request_id}", response_model=dict)
 async def update_service_request(
-    case_id: str,
+    request_id: str,
     request_update: ServiceRequestUpdate,
     session: AsyncSession = Depends(get_session)
 ):
-    """Update service request"""
+    """Update service request by ID (UUID)"""
     try:
         # Check if request exists
-        query = select(ServiceRequestSQL).where(ServiceRequestSQL.case_id == case_id)
+        query = select(ServiceRequestSQL).where(ServiceRequestSQL.id == request_id)
         result = await session.execute(query)
         existing_request = result.scalar_one_or_none()
         
@@ -266,7 +266,7 @@ async def update_service_request(
         update_data = request_update.dict(exclude_unset=True)
         if update_data:
             stmt = update(ServiceRequestSQL).where(
-                ServiceRequestSQL.case_id == case_id
+                ServiceRequestSQL.id == request_id
             ).values(**update_data)
             
             await session.execute(stmt)
@@ -278,7 +278,7 @@ async def update_service_request(
         raise
     except Exception as e:
         await session.rollback()
-        logging.error(f"Error updating service request {case_id}: {e}")
+        logging.error(f"Error updating service request {request_id}: {e}")
         raise HTTPException(status_code=500, detail="Failed to update service request")
 
 @router.delete("/{case_id}", response_model=dict)
