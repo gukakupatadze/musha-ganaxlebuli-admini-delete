@@ -16,9 +16,9 @@ const Testimonials = ({ language }) => {
   useEffect(() => {
     const fetchTestimonials = async () => {
       try {
-        console.log('Fetching testimonials from:', `${API}/testimonials/`);
+        console.log('Fetching testimonials from:', `${BACKEND_URL}/api/testimonials/`);
         setLoading(true);
-        const response = await axios.get(`${API}/testimonials/`);
+        const response = await axios.get(`${BACKEND_URL}/api/testimonials/`);
         console.log('Testimonials response:', response.data);
         setTestimonials(response.data);
         setError(null);
