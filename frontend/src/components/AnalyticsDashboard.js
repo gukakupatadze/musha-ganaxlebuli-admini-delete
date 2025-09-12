@@ -267,19 +267,19 @@ const AnalyticsDashboard = ({ serviceRequests = [], contactMessages = [], testim
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-800 border-gray-700">
+        <Card className="bg-gray-800 dark:bg-gray-800 bg-white border-gray-700 dark:border-gray-700 border-gray-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-300">
-              საშუალო შეფასება
+            <CardTitle className="text-sm font-medium text-gray-300 dark:text-gray-300 text-gray-700">
+              აქტიური ტასკები
             </CardTitle>
-            <Star className="h-4 w-4 text-yellow-400" />
+            <Activity className="h-4 w-4 text-blue-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">
-              {analytics.averageRating.toFixed(1)}/5
+            <div className="text-2xl font-bold text-white dark:text-white text-gray-900">
+              {analytics.totalRequests - analytics.completedRequests}
             </div>
-            <p className="text-xs text-gray-400">
-              {analytics.totalTestimonials} გამოხმაურება
+            <p className="text-xs text-gray-400 dark:text-gray-400 text-gray-600">
+              მუშაობაში: {serviceRequests.filter(r => r.status === 'in_progress').length}
             </p>
           </CardContent>
         </Card>
