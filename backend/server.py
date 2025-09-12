@@ -95,10 +95,10 @@ async def create_status_check(status_check: StatusCheckCreate):
     }
 
 # Include all route modules
-api_router.include_router(service_requests_pg.router, prefix="/service-requests", tags=["service-requests"])
-api_router.include_router(contact_pg.router, prefix="/contact", tags=["contact"])
-api_router.include_router(price_estimate_pg.router, prefix="/price-estimate", tags=["price-estimate"])
-api_router.include_router(testimonials_pg.router, prefix="/testimonials", tags=["testimonials"])
+api_router.include_router(service_requests_router, prefix="/service-requests", tags=["service-requests"])
+api_router.include_router(contact_router, prefix="/contact", tags=["contact"])
+api_router.include_router(price_estimate_router, prefix="/price-estimate", tags=["price-estimate"])
+api_router.include_router(testimonials_router, prefix="/testimonials", tags=["testimonials"])
 
 # Include API router in main app
 app.include_router(api_router)
