@@ -708,7 +708,7 @@ const AdminPanel = () => {
         {/* Dashboard Tab - Analytics */}
         {activeTab === 'dashboard' && (
           <AnalyticsDashboard 
-            serviceRequests={serviceRequests}
+            serviceRequests={approvedServiceRequests}
             contactMessages={contactMessages}
             testimonials={testimonials}
           />
