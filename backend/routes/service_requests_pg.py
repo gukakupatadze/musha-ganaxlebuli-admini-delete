@@ -262,3 +262,50 @@ async def get_approved_requests(
     except Exception as e:
         logging.error(f"Error getting approved requests: {e}")
         raise HTTPException(status_code=500, detail="Failed to retrieve approved requests")
+
+@router.get("/archived", response_model=List[ServiceRequestResponse])
+async def get_archived_requests(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(100, ge=1, le=1000),
+    session: AsyncSession = Depends(get_session)
+):
+    """Get archived service requests"""
+    try:
+        query = select(ServiceRequestSQL).where(
+            ServiceRequestSQL.is_archived == True
+        ).order_by(desc(ServiceRequestSQL.created_at))
+        
+        query = query.offset(skip).limit(limit)
+        
+        result = await session.execute(query)
+        requests = result.scalars().all()
+        
+        # Convert to response format
+        response_data = []
+        for req in requests:
+            response_data.append(ServiceRequestResponse(
+                id=str(req.id),
+                name=req.name,
+                email=req.email,
+                phone=req.phone,
+                device_type=req.device_type,
+                problem_description=req.problem_description,
+                urgency=req.urgency,
+                status=req.status,
+                case_id=req.case_id,
+                created_at=req.created_at,
+                started_at=req.started_at,
+                completed_at=req.completed_at,
+                estimated_completion=req.estimated_completion.strftime('%Y-%m-%d') if req.estimated_completion else None,
+                price=float(req.price) if req.price else None,
+                is_read=req.is_read,
+                is_archived=req.is_archived,
+                approved_for_kanban=req.approved_for_kanban,
+                admin_comment=req.admin_comment
+            ))
+        
+        return response_data
+        
+    except Exception as e:
+        logging.error(f"Error getting archived requests: {e}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve archived requests")
