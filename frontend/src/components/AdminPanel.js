@@ -717,7 +717,7 @@ const AdminPanel = () => {
         {/* Dashboard Tab - Analytics */}
         {activeTab === 'dashboard' && (
           <AnalyticsDashboard 
-            serviceRequests={approvedServiceRequests}
+            serviceRequests={window.kanbanTasks || []}
             contactMessages={contactMessages}
             testimonials={testimonials}
           />
