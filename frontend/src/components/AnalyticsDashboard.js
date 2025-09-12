@@ -284,18 +284,18 @@ const AnalyticsDashboard = ({ serviceRequests = [], contactMessages = [], testim
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-800 border-gray-700">
+        <Card className="bg-gray-800 dark:bg-gray-800 bg-white border-gray-700 dark:border-gray-700 border-gray-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-300">
+            <CardTitle className="text-sm font-medium text-gray-300 dark:text-gray-300 text-gray-700">
               სულ შემოსავალი
             </CardTitle>
             <TrendingUp className="h-4 w-4 text-green-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">
+            <div className="text-2xl font-bold text-white dark:text-white text-gray-900">
               {analytics.totalRevenue.toFixed(0)}₾
             </div>
-            <p className="text-xs text-gray-400">
+            <p className="text-xs text-gray-400 dark:text-gray-400 text-gray-600">
               საშუალო: {analytics.averagePrice.toFixed(0)}₾
             </p>
           </CardContent>
