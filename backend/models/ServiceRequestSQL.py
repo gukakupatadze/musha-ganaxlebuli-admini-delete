@@ -52,7 +52,7 @@ class ServiceRequestCreate(BaseModel):
     urgency: str = Field(..., pattern=r'^(low|medium|high|critical)$')
 
 class ServiceRequestUpdate(BaseModel):
-    status: Optional[str] = Field(None, regex=r'^(pending|in_progress|completed|picked_up|archived)$')
+    status: Optional[str] = Field(None, pattern=r'^(pending|in_progress|completed|picked_up|archived)$')
     started_at: Optional[datetime] = None
     completed_at: Optional[datetime] = None
     estimated_completion: Optional[datetime] = None
