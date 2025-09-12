@@ -152,12 +152,12 @@ const AnalyticsDashboard = ({ serviceRequests = [], contactMessages = [], testim
     
     return (
       <div className="space-y-3">
-        <h4 className="font-medium text-sm text-gray-300">{title}</h4>
+        <h4 className="font-medium text-sm text-gray-300 dark:text-gray-300 text-gray-700">{title}</h4>
         {data.map((item, index) => (
           <div key={index} className="space-y-1">
             <div className="flex justify-between text-sm">
-              <span className="text-gray-300">{item.name}</span>
-              <span className="text-white font-medium">{item.value}</span>
+              <span className="text-gray-300 dark:text-gray-300 text-gray-700">{item.name}</span>
+              <span className="text-white dark:text-white text-gray-900 font-medium">{item.value}</span>
             </div>
             <div className="w-full bg-gray-700 rounded-full h-2">
               <div 
