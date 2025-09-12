@@ -705,12 +705,13 @@ const AdminPanel = () => {
       <main className={`${activeTab === 'kanban' ? 'max-w-none px-6' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'} py-8`}>
         {console.log('Current activeTab:', activeTab)}
         
-        {/* Dashboard Tab - Only Approved Kanban Requests */}
+        {/* Dashboard Tab - Analytics */}
         {activeTab === 'dashboard' && (
-          <div className="p-6 text-center">
-            <h3 className="text-xl font-semibold mb-4">Analytics Dashboard</h3>
-            <p className="text-gray-400">Analytics feature coming soon...</p>
-          </div>
+          <AnalyticsDashboard 
+            serviceRequests={serviceRequests}
+            contactMessages={contactMessages}
+            testimonials={testimonials}
+          />
         )}
 
         {/* Kanban Board Tab */}
