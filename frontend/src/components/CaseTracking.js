@@ -376,7 +376,7 @@ const CaseTracking = ({ language }) => {
                         {language === 'ka' ? 'შექმნის თარიღი:' : 'Created Date:'}
                       </span>
                       <span className="text-white">
-                        {caseInfo.is_kanban_case ? formatDate(caseInfo.created_at) : caseInfo.created_at}
+                        {formatDate(caseInfo.created_at)}
                       </span>
                     </div>
                     
