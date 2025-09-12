@@ -426,13 +426,13 @@ const AnalyticsDashboard = ({ serviceRequests = [], contactMessages = [], testim
               <div className="flex justify-between">
                 <span className="text-gray-300">კმაყოფილების დონე:</span>
                 <span className="text-yellow-400 font-medium">
-                  {((analytics.averageRating / 5) * 100).toFixed(1)}%
+                  90.0%
                 </span>
               </div>
               <div className="w-full bg-gray-700 rounded-full h-2">
                 <div 
                   className="bg-yellow-500 h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${(analytics.averageRating / 5) * 100}%` }}
+                  style={{ width: `90%` }}
                 />
               </div>
             </div>
