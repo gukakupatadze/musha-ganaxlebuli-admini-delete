@@ -47,9 +47,9 @@ class ServiceRequestCreate(BaseModel):
     name: str = Field(..., max_length=100)
     email: str = Field(..., max_length=255)
     phone: str = Field(..., max_length=20)
-    device_type: str = Field(..., regex=r'^(hdd|ssd|raid|usb|sd|other)$')
+    device_type: str = Field(..., pattern=r'^(hdd|ssd|raid|usb|sd|other)$')
     problem_description: str
-    urgency: str = Field(..., regex=r'^(low|medium|high|critical)$')
+    urgency: str = Field(..., pattern=r'^(low|medium|high|critical)$')
 
 class ServiceRequestUpdate(BaseModel):
     status: Optional[str] = Field(None, regex=r'^(pending|in_progress|completed|picked_up|archived)$')
