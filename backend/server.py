@@ -64,7 +64,8 @@ async def health_check(session: AsyncSession = Depends(get_session)):
     """Health check with database connectivity verification"""
     try:
         # Test database connection
-        result = await session.execute("SELECT 1")
+        from sqlalchemy.sql import text
+        result = await session.execute(text("SELECT 1"))
         db_status = "connected" if result else "disconnected"
         
         return {
