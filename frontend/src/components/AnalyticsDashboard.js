@@ -22,6 +22,11 @@ const AnalyticsDashboard = ({ serviceRequests = [], contactMessages = [], testim
   const [timeFilter, setTimeFilter] = useState('all'); // all, week, month, year
   const [selectedMetric, setSelectedMetric] = useState('requests');
 
+  // Debug logging
+  console.log('📊 Analytics Dashboard - Service Requests:', serviceRequests.length);
+  console.log('📊 Analytics Dashboard - Approved Requests:', serviceRequests.filter(r => r.approved_for_kanban).length);
+  console.log('📊 Analytics Dashboard - All Data:', serviceRequests);
+
   // Calculate key metrics
   const analytics = useMemo(() => {
     const now = new Date();
