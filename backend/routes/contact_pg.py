@@ -41,7 +41,7 @@ async def create_contact_message(
         return {
             "success": True,
             "message": "Contact message sent successfully",
-            "id": str(new_message.id)
+            "id": new_message.id
         }
         
     except Exception as e:
@@ -72,7 +72,7 @@ async def get_all_contact_messages(
         response_data = []
         for msg in messages:
             response_data.append(ContactMessageResponse(
-                id=str(msg.id),
+                id=msg.id,
                 name=msg.name,
                 email=msg.email,
                 phone=msg.phone,
@@ -148,7 +148,7 @@ async def get_contact_message(
             raise HTTPException(status_code=404, detail="Contact message not found")
         
         return ContactMessageResponse(
-            id=str(message.id),
+            id=message.id,
             name=message.name,
             email=message.email,
             phone=message.phone,

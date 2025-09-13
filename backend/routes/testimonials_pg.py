@@ -44,7 +44,7 @@ async def create_testimonial(
         return {
             "success": True,
             "message": "Testimonial created successfully",
-            "id": str(new_testimonial.id)
+            "id": new_testimonial.id
         }
         
     except Exception as e:
@@ -75,7 +75,7 @@ async def get_all_testimonials(
         response_data = []
         for testimonial in testimonials:
             response_data.append(TestimonialResponse(
-                id=str(testimonial.id),
+                id=testimonial.id,
                 name=testimonial.name,
                 name_en=testimonial.name_en,
                 position=testimonial.position,
@@ -109,7 +109,7 @@ async def get_all_testimonials_admin(
         response_data = []
         for testimonial in testimonials:
             response_data.append(TestimonialResponse(
-                id=str(testimonial.id),
+                id=testimonial.id,
                 name=testimonial.name,
                 name_en=testimonial.name_en,
                 position=testimonial.position,
@@ -143,7 +143,7 @@ async def get_testimonial(
             raise HTTPException(status_code=404, detail="Testimonial not found")
         
         return TestimonialResponse(
-            id=str(testimonial.id),
+            id=testimonial.id,
             name=testimonial.name,
             name_en=testimonial.name_en,
             position=testimonial.position,

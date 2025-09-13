@@ -28,11 +28,25 @@ async def create_service_request(
 ):
     """Create a new service request"""
     try:
-        # Generate case ID using database sequence
-        case_id_result = await session.execute(
-            text("SELECT 'DL' || EXTRACT(YEAR FROM NOW()) || LPAD(nextval('case_id_seq')::text, 3, '0')")
+        # Generate case ID using simple counter
+        from datetime import datetime
+        year = datetime.now().year
+        
+        # Get the highest case number for this year
+        latest_case = await session.execute(
+            select(ServiceRequestSQL.case_id).where(
+                ServiceRequestSQL.case_id.like(f'DL{year}%')
+            ).order_by(ServiceRequestSQL.case_id.desc()).limit(1)
         )
-        case_id = case_id_result.scalar()
+        latest = latest_case.scalar()
+        
+        if latest:
+            # Extract number and increment
+            case_num = int(latest[6:]) + 1  # Remove 'DL2025' prefix
+        else:
+            case_num = 1
+            
+        case_id = f"DL{year}{case_num:03d}"
         
         # Calculate estimated completion (3 days from now)
         estimated_completion = datetime.utcnow() + timedelta(days=3)
@@ -56,7 +70,7 @@ async def create_service_request(
         return {
             "success": True,
             "message": "Service request created successfully",
-            "case_id": case_id,
+            "case_id": new_request.case_id,
             "estimated_completion": estimated_completion.isoformat()
         }
         
@@ -91,7 +105,7 @@ async def get_all_service_requests(
         response_data = []
         for req in requests:
             response_data.append(ServiceRequestResponse(
-                id=str(req.id),
+                id=req.id,
                 name=req.name,
                 email=req.email,
                 phone=req.phone,
@@ -134,7 +148,7 @@ async def get_approved_requests(
         response_data = []
         for req in requests:
             response_data.append(ServiceRequestResponse(
-                id=str(req.id),
+                id=req.id,
                 name=req.name,
                 email=req.email,
                 phone=req.phone,
@@ -181,7 +195,7 @@ async def get_archived_requests(
         response_data = []
         for req in requests:
             response_data.append(ServiceRequestResponse(
-                id=str(req.id),
+                id=req.id,
                 name=req.name,
                 email=req.email,
                 phone=req.phone,
@@ -222,7 +236,7 @@ async def get_service_request(
             raise HTTPException(status_code=404, detail="Service request not found")
         
         return ServiceRequestResponse(
-            id=str(request.id),
+            id=request.id,
             name=request.name,
             email=request.email,
             phone=request.phone,
