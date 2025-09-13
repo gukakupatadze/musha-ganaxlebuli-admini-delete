@@ -15,6 +15,8 @@ from pydantic import BaseModel, Field
 from typing import List
 import uuid
 from datetime import datetime
+import sys
+import traceback
 
 # PostgreSQL imports
 from database import get_session, init_db, close_db
@@ -126,9 +128,14 @@ if static_dir.exists():
 async def startup_event():
     """Initialize database connection on startup"""
     try:
+        print("🚀 Starting DataLab Georgia API...")
+        print(f"Python version: {sys.version}")
         await init_db()
-        logging.info("✅ PostgreSQL database initialized successfully")
+        print("✅ SQLite database initialized successfully")
+        logging.info("✅ SQLite database initialized successfully")
     except Exception as e:
+        print(f"❌ Database initialization failed: {e}")
+        print(f"Traceback: {traceback.format_exc()}")
         logging.error(f"❌ Database initialization failed: {e}")
 
 @app.on_event("shutdown")
@@ -148,10 +155,12 @@ logging.basicConfig(
 
 if __name__ == "__main__":
     import uvicorn
+    print("🌟 Starting DataLab Georgia server on http://localhost:8001")
     uvicorn.run(
         "server:app",
         host="0.0.0.0",
         port=8001,
         reload=True,
-        access_log=True
+        access_log=True,
+        log_level="info"
     )
