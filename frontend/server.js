@@ -168,19 +168,19 @@ app.post('/api/price-estimate/', (req, res) => {
 });
 
 // Serve static files from build directory
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, './build')));
 
 // Handle React Router - send all non-API requests to index.html
 app.get('*', (req, res) => {
   if (req.path.startsWith('/api/')) {
     res.status(404).json({ error: 'API endpoint not found' });
   } else {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+    res.sendFile(path.join(__dirname, './build/index.html'));
   }
 });
 
 app.listen(PORT, () => {
   console.log(`🌟 DataLab Georgia server running on http://localhost:${PORT}`);
-  console.log(`📁 Serving static files from: ${path.join(__dirname, 'build')}`);
+  console.log(`📁 Serving static files from: ${path.join(__dirname, './build')}`);
   console.log(`🔗 API endpoints available at: http://localhost:${PORT}/api/`);
 });
