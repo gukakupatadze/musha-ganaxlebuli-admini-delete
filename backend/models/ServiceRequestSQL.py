@@ -4,10 +4,9 @@ DataLab Georgia - Migration from MongoDB to PostgreSQL
 """
 
 from sqlalchemy import Column, String, Text, DateTime, Boolean, Numeric, CheckConstraint
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Integer
 from sqlalchemy.sql import func
 from database import Base
-import uuid
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field
@@ -16,7 +15,7 @@ class ServiceRequestSQL(Base):
     """PostgreSQL ORM model for service requests"""
     __tablename__ = "service_requests"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100), nullable=False)
     email = Column(String(255), nullable=False)
     phone = Column(String(20), nullable=False)
@@ -25,10 +24,10 @@ class ServiceRequestSQL(Base):
     urgency = Column(String(20), nullable=False)
     status = Column(String(20), default='pending')
     case_id = Column(String(20), unique=True, nullable=False)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    started_at = Column(DateTime(timezone=True), nullable=True)
-    completed_at = Column(DateTime(timezone=True), nullable=True)
-    estimated_completion = Column(DateTime(timezone=True), nullable=True)
+    created_at = Column(DateTime, default=func.now())
+    started_at = Column(DateTime, nullable=True)
+    completed_at = Column(DateTime, nullable=True)
+    estimated_completion = Column(DateTime, nullable=True)
     price = Column(Numeric(10, 2), nullable=True)
     is_read = Column(Boolean, default=False)
     is_archived = Column(Boolean, default=False)
@@ -63,7 +62,7 @@ class ServiceRequestUpdate(BaseModel):
     admin_comment: Optional[str] = None
 
 class ServiceRequestResponse(BaseModel):
-    id: str
+    id: int
     name: str
     email: str
     phone: str

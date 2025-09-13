@@ -4,10 +4,8 @@ DataLab Georgia - Migration from MongoDB to PostgreSQL
 """
 
 from sqlalchemy import Column, String, Text, DateTime, Boolean, Integer, CheckConstraint
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
 from database import Base
-import uuid
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field, validator
@@ -16,7 +14,7 @@ class TestimonialSQL(Base):
     """PostgreSQL ORM model for testimonials"""
     __tablename__ = "testimonials"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100), nullable=False)
     name_en = Column(String(100), nullable=False)
     position = Column(String(100), nullable=False)
@@ -26,7 +24,7 @@ class TestimonialSQL(Base):
     rating = Column(Integer, default=5)
     image = Column(String(500), nullable=True)
     is_active = Column(Boolean, default=True)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime, default=func.now())
     
     # Add constraints
     __table_args__ = (
@@ -62,7 +60,7 @@ class TestimonialUpdate(BaseModel):
     is_active: Optional[bool] = None
 
 class TestimonialResponse(BaseModel):
-    id: str
+    id: int
     name: str
     name_en: str
     position: str

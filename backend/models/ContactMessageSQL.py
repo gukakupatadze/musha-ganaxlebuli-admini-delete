@@ -4,10 +4,9 @@ DataLab Georgia - Migration from MongoDB to PostgreSQL
 """
 
 from sqlalchemy import Column, String, Text, DateTime, CheckConstraint
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Integer
 from sqlalchemy.sql import func
 from database import Base
-import uuid
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field
@@ -16,13 +15,13 @@ class ContactMessageSQL(Base):
     """PostgreSQL ORM model for contact messages"""
     __tablename__ = "contact_messages"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100), nullable=False)
     email = Column(String(255), nullable=False)
     phone = Column(String(20), nullable=True)
     subject = Column(String(200), nullable=False)
     message = Column(Text, nullable=False)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime, default=func.now())
     status = Column(String(20), default='new')
     
     # Add constraints
@@ -42,7 +41,7 @@ class ContactMessageUpdate(BaseModel):
     status: Optional[str] = Field(None, pattern=r'^(new|read|replied)$')
 
 class ContactMessageResponse(BaseModel):
-    id: str
+    id: int
     name: str
     email: str
     phone: Optional[str] = None

@@ -1,6 +1,6 @@
 """
-PostgreSQL Database Connection and Session Management
-DataLab Georgia - Migration from MongoDB to PostgreSQL
+SQLite Database Connection and Session Management
+DataLab Georgia - Converted from PostgreSQL to SQLite for WebContainer
 """
 
 import os
@@ -11,15 +11,12 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-# PostgreSQL connection settings
-POSTGRES_URL = os.environ.get(
-    'POSTGRES_URL', 
-    'postgresql+asyncpg://datalab_user:datalab_pass123@localhost:5432/datalab_georgia'
-)
+# SQLite connection settings (works in WebContainer)
+DATABASE_URL = "sqlite+aiosqlite:///./datalab_georgia.db"
 
 # Create async engine
 engine = create_async_engine(
-    POSTGRES_URL,
+    DATABASE_URL,
     echo=True,  # Set to False in production
     future=True
 )
